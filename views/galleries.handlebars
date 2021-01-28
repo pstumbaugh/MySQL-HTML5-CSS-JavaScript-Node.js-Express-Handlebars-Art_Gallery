@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF=8">
+  <title>Online Art Gallery Database</title>
+  <link rel="stylesheet" href="stylesheet.css" type="text/css">
+</head>
+
+<body class="body">
+
+  <button type="button" onclick="location.href='http://flip1.engr.oregonstate.edu:8877'">HOME</button>
+
+  <h1>MySQL Galleries Results:</h1>
+  <br>
+
+  <!--Display our current data table-->
+  <table id="currentTable">
+    <th>Gallery ID</th>
+    <th>Gallery Name</th>
+
+    {{#each dataList}}
+    <tr id="newRow">
+      <td id="galleryID">{{this.galleryID}}</td>
+      <td id="galleryName">{{this.galleryName}}</td>
+
+      <td><button type="button" onclick="deleteRow('currentTable',this)">Delete</button></td>
+      <td><button type="button" onclick="location.href='__________'+{{this.galleryID}}">Update</button>
+      </td>
+    </tr>
+    {{/each}}
+  </table>
+
+  <!-- If no information in table, show text saying no information -->
+  <h3 id="noDataTag"></h3>
+
+  <br><br>
+
+  <form>
+    <fieldset>
+      <legend>Add a Gallery</legend>
+      <label for="galleryNameLabel">Gallery Name: </label>
+      <input type="text" name="galleryName" id="galleyName"></input>
+      <br>
+      <div id="galleryAdderButton">
+      </div>
+
+      <!-- display any missing NOT NULL items -->
+      <div><b id="addErrorName"></b></div>
+
+      <!-- display successfull add comment -->
+      <span id="addSuccess"></span>
+    </fieldset>
+  </form>
+
+  <script src="galleriesScript.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,11 @@
+.body {
+  background-color: rgb(216, 216, 216);
+}
+
+.table td{
+  text-align: left;
+}
+
+#galleryID {
+  text-align: center;
+}
