@@ -1,8 +1,8 @@
 {
-  "name": "workouts",
+  "name": "art",
   "version": "1.0.0",
-  "description": "workout table using node.js and mysql",
-  "main": "app.js",
+  "description": "Art Gallery Database example",
+  "main": "art.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
