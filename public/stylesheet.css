@@ -6,6 +6,46 @@
   text-align: left;
 }
 
-#galleryID {
+table {
+  border: 2px solid black;
+}
+
+td {
+  border: 1px solid black;
+}
+
+.homePageButton {
+  background-color: rgb(94, 94, 94);
+  color: white;
+  border: solid;
+  border-color: rgb(48, 48, 48);
+  padding: 9px 22px;
   text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 8px;
+}
+
+.homePageButton:hover {
+  background-color: darkgoldenrod;
+  color: white;
+}
+
+.homeButton {
+  background-color: rgb(80, 80, 80);
+  color: white;
+  border: solid;
+  border-color: rgb(48, 48, 48);
+  padding: 9px 22px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 8px;
+}
+
+.homeButton:hover {
+  background-color: rgb(129, 129, 129);
+  color: white;
 }

@@ -1,18 +1,79 @@
-
 <!DOCTYPE html>
 <html>
 
 <head>
-    <meta charset="UTF=8">
-    <title>Online Art Gallery Database</title>
-    <link rel="stylesheet" href="stylesheet.css" type="text/css">
+  <title>Online Art Gallery Database</title>
+  <meta charset="UTF=8">
+  <link rel="stylesheet" href="stylesheet.css" type="text/css">
 </head>
 
 <body class="body">
 
-    <button type="button" onclick="location.href='/'" >HOME</button>
+  <button class="homeButton" type="button" onclick="location.href='/'">HOME</button>
 
-<!-- <script src="./index.js"></script> -->
+  <h1>Paintings Results:</h1>
+  <br>
+
+  <!--Display our current data table-->
+  <table id="currentTable">
+    <th>Painting ID</th>
+    <th>Artist ID</th>
+    <th>Art Type</th>
+    <th>Price ($)</th>
+    <th>Gallery ID</th>
+    <th>Order ID</th>
+
+    {{#each dataList}}
+    <tr id="newRow">
+      <td id="paintingID">{{this.paintingID}}</td>
+      <td id="artistID">{{this.artistID}}</td>
+      <td id="artType">{{this.artType}}</td>
+      <td id="price">{{this.price}}</td>
+      <td id="galleryID">{{this.galleryID}}</td>
+      <td id="orderID">{{this.orderID}}</td>
+
+      <td><button type="button" onclick="deleteRow('currentTable',this)">Delete</button></td>
+      <td><button type="button" onclick="location.href='__________'+{{this.paintingID}}">Update</button>
+      </td>
+    </tr>
+    {{/each}}
+  </table>
+
+  <!-- If no information in table, show text saying no information -->
+  <h3 id="noDataTag"></h3>
+
+  <br><br>
+
+  <form>
+    <fieldset>
+      <legend>Add a Painting</legend>
+      <label for="artistIDLable">Artist ID: </label>
+      <input type="text" name="artistIDForm" id="artistIDForm"></input>
+      <br>
+      <label for="artTypeLabel">Art Type: </label>
+      <input type="text" name="artTypeForm" id="artTypeForm"></input>
+      <br>
+      <label for="priceLabel">Price (in $): </label>
+      <input type="text" name="priceForm" id="priceForm"></input>
+      <br>
+      <label for="galleryIDLabel">Gallery ID: </label>
+      <input type="text" name="galleryIDForm" id="galleryIDForm"></input>
+      <br>
+      <label for="orderIDLabel">Order ID: </label>
+      <input type="text" name="orderIDForm" id="orderIDForm"></input>
+      <br>
+      <div id="paintingAdderButton">
+      </div>
+
+      <!-- display any missing NOT NULL items -->
+      <div><b id="addErrorName"></b></div>
+
+      <!-- display successfull add comment -->
+      <span id="addSuccess"></span>
+    </fieldset>
+  </form>
+
+  <script src="paintingsScript.js"></script>
 </body>
 
 </html>

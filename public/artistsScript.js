@@ -5,25 +5,29 @@
 var addButton = document.createElement("button");
 var addButtonText = document.textContent = "Submit";
 addButton.appendChild(document.createTextNode(addButtonText));
-document.getElementById("galleryAdderButton").appendChild(addButton);
+document.getElementById("artistAdderButton").appendChild(addButton);
 
 //When client clicks the add a gallery submit button:
 function addButtonClick() {
   var req = new XMLHttpRequest(); //create new request
 
   //get the values entered by user
-  var payloadGalleryName = document.getElementById("galleryNameForm").value;
+  var payloadArtistFirstName = document.getElementById("artistFirstName").value;
+  var payloadArtistLastName = document.getElementById("artistLastName").value;
+
 
   //if one of the items in the table is not filled out, display error about that item
   //(after this, it will check all items are filled in. If not, it will error and not add to table)
-  if (payloadGalleryName == undefined || payloadGalleryName == "") {
-    document.getElementById("addErrorName").textContent = "ERROR: Missing gallery name";
+  if (payloadArtistFirstName == undefined || payloadArtistFirstName == "") {
+    document.getElementById("addErrorName").textContent = "ERROR: Missing first name";
+  } else if (payloadArtistLastName == undefined || payloadArtistLastName == "") {
+    document.getElementById("addErrorName").textContent = "ERROR: Missing last name";
   };
 
   //check if all items are fileld out. If so, continue on sending the data to the database, else display error and don't do anything
-  if (payloadGalleryName != "") {
+  if (payloadArtistFirstName != "" || payloadArtistLastName != "") {
     //send an insert request to our server via GET
-    req.open("GET", "http://flip1.engr.oregonstate.edu:8877insert?galleryID=" + payloadGalleryName, true);
+    req.open("GET", "http://flip1.engr.oregonstate.edu:8877insert?galleryID=" + payloadArtistFirstName, true);
 
     //add event listener for async request (function)
     req.addEventListener('load', function () {

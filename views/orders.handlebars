@@ -11,27 +11,26 @@
 
   <button class="homeButton" type="button" onclick="location.href='/'">HOME</button>
 
-  <h1>Artists Results:</h1>
+  <h1>Orders Results:</h1>
   <br>
 
   <!--Display our current data table-->
   <table id="currentTable">
-    <th>Artist ID</th>
-    <th>First Name</th>
-    <th>Last Name</th>
+    <th>Order ID</th>
+    <th>Customer ID</th>
 
     {{#each dataList}}
     <tr id="newRow">
-      <td id="artistID">{{this.artistID}}</td>
-      <td id="artistFirstName">{{this.artistFirstName}}</td>
-      <td id="artistLastName">{{this.artistLastName}}</td>
+      <td id="orderID">{{this.orderID}}</td>
+      <td id="customerID">{{this.customerID}}</td>
 
       <td><button type="button" onclick="deleteRow('currentTable',this)">Delete</button></td>
-      <td><button type="button" onclick="location.href='__________'+{{this.artistID}}">Update</button>
+      <td><button type="button" onclick="location.href='__________'+{{this.orderID}}">Update</button>
       </td>
     </tr>
     {{/each}}
   </table>
+
 
 
   <!-- If no information in table, show text saying no information -->
@@ -41,14 +40,12 @@
 
   <form>
     <fieldset>
-      <legend>Add an Artist</legend>
-      <label for="artistFirstNameLabel">Artist First Name: </label>
-      <input type="text" name="artistFirstNameForm" id="artistFirstNameForm"></input>
+      <legend>Add an Order</legend>
+      <label>(Order ID will auto-populate) </label><br>
+      <label for="customerIDLabel">Customer ID: </label>
+      <input type="text" name="customerIDForm" id="customerIDForm"></input>
       <br>
-    <label for="artistLastNameLabel">Artist Last Name: </label>
-      <input type="text" name="artistLastNameForm" id="artistLastNameForm"></input>
-      <br>
-      <div id="artistAdderButton">
+      <div id="orderAdderButton">
       </div>
 
       <!-- display any missing NOT NULL items -->
@@ -59,7 +56,7 @@
     </fieldset>
   </form>
 
-  <script src="artistsScript.js"></script>
+  <script src="ordersScript.js"></script>
 </body>
 
 </html>
