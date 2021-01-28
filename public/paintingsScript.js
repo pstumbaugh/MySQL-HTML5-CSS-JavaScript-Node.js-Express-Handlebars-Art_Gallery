@@ -5,23 +5,35 @@
 var addButton = document.createElement("button");
 var addButtonText = document.textContent = "Submit";
 addButton.appendChild(document.createTextNode(addButtonText));
-document.getElementById("galleryAdderButton").appendChild(addButton);
+document.getElementById("paintingAdderButton").appendChild(addButton);
 
 //When client clicks the add a gallery submit button:
 function addButtonClick() {
   var req = new XMLHttpRequest(); //create new request
 
   //get the values entered by user
-  var payloadGalleryName = document.getElementById("galleryNameForm").value;
+  var payloadArtistID = document.getElementById("artistIDForm").value;
+  var payloadArtType = document.getElementById("artTypeForm").value;
+  var payloadPrice = document.getElementById("priceForm").value;
+  var payloadGalleryID = document.getElementById("galleryIDForm").value;
+  var payloadOrderID = document.getElementById("orderIDForm").value;
 
   //if one of the items in the table is not filled out, display error about that item
   //(after this, it will check all items are filled in. If not, it will error and not add to table)
-  if (payloadGalleryName == undefined || payloadGalleryName == "") {
-    document.getElementById("addErrorName").textContent = "ERROR: Missing gallery name";
+  if (payloadArtistID == undefined || payloadArtistID == "") {
+    document.getElementById("addErrorName").textContent = "ERROR: Missing artist ID";
+  } else if (payloadArtType == undefined || payloadArtType == "") {
+    document.getElementById("addErrorName").textContent = "ERROR: Missing art type";
+  } else if (payloadPrice == undefined || payloadPrice == "") {
+    document.getElementById("addErrorName").textContent = "ERROR: Missing price";
+  } else if (payloadGalleryID == undefined || payloadGalleryID == "") {
+    document.getElementById("addErrorName").textContent = "ERROR: Missing gallery ID";
+  } else if (payloadOrderID == undefined || payloadOrderID == "") {
+    document.getElementById("addErrorName").textContent = "ERROR: Missing order ID";
   };
 
   //check if all items are fileld out. If so, continue on sending the data to the database, else display error and don't do anything
-  if (payloadGalleryName != "") {
+  if (payloadArtistID != "" || payloadArtType != "" || payloadPrice != "" || payloadGalleryID != "" || payloadOrderID != "") {
     //send an insert request to our server via GET
     req.open("GET", "http://flip1.engr.oregonstate.edu:8877insert?galleryID=" + payloadGalleryName, true);
 

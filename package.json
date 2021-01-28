@@ -15,7 +15,6 @@
     "express-session": "^1.11.3",
     "forever": "^3.0.4",
     "http": "0.0.1-security",
-    "mysql": "^2.18.1",
-    "node": "^15.4.0"
+    "mysql": "^2.18.1"
   }
 }

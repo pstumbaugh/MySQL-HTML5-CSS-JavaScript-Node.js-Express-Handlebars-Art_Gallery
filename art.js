@@ -41,24 +41,112 @@ app.get('/', function (req, res, next) {
 //artists page
 app.get('/artists', function (req, res, next) {
   var context = {};
+  //test data:
+  context.dataList = [
+    {
+      "artistID": "5",
+      "artistFirstName": "Vincent",
+      "artistLastName": "van Gogh"
+    },
+    {
+      "artistID": "15",
+      "artistFirstName": "Claude",
+      "artistLastName": "Monet"
+
+    },
+    {
+      "artistID": "10",
+      "artistFirstName": "Frida",
+      "artistLastName": "Kahlo"
+
+    },
+    {
+      "artistID": "3",
+      "artistFirstName": "Leonardo",
+      "artistLastName": "da Vinci"
+
+    }
+  ];
   res.render('artists', context);
 });
 
 //customers page
 app.get('/customers', function (req, res, next) {
   var context = {};
+  //test data:
+  context.dataList = [
+    {
+      "customerID": "14",
+      "customerFirstName": "Neil",
+      "customerLastName": "Armstrong"
+    },
+    {
+      "customerID": "5",
+      "customerFirstName": "Buzz",
+      "customerLastName": "Aldrin"
+
+    },
+    {
+      "customerID": "23",
+      "customerFirstName": "Sally",
+      "customerLastName": "Ride"
+
+    },
+    {
+      "customerID": "24",
+      "customerFirstName": "Mae",
+      "customerLastName": "Jemison"
+
+    }
+  ];
   res.render('customers', context);
 });
 
 //paintings page
 app.get('/paintings', function (req, res, next) {
   var context = {};
+  //test data:
+  context.dataList = [
+    {
+      "paintingID": "1",
+      "artistID": "5",
+      "artType": "Abstract",
+      "price": "22000",
+      "galleryID": "1",
+      "orderID": "10"
+    },
+    {
+      "paintingID": "2",
+      "artistID": "15",
+      "artType": "Contemporary",
+      "price": "8000",
+      "galleryID": "3",
+      "orderID": ""    
+    },
+    {
+      "paintingID": "3",
+      "artistID": "10",
+      "artType": "Pop",
+      "price": "2500",
+      "galleryID": "2",
+      "orderID": "4"
+    },
+    {
+      "paintingID": "4",
+      "artistID": "3",
+      "artType": "Impressionist",
+      "price": "16000",
+      "galleryID": "1",
+      "orderID": ""
+    }
+  ];
   res.render('paintings', context);
 });
 
 //galleries page
 app.get('/galleries', function (req, res, next) {
   var context = {};
+  //test data:
   context.dataList = [
     {
       "galleryID": "1",
@@ -74,6 +162,27 @@ app.get('/galleries', function (req, res, next) {
     }
   ];
   res.render('galleries', context);
+});
+
+//orders page
+app.get('/orders', function (req, res, next) {
+  var context = {};
+  //test data:
+  context.dataList = [
+    {
+      "orderID": "1",
+      "customerID": "14"
+    },
+    {
+      "orderID": "2",
+      "customerID": "5"
+    },
+    {
+      "orderID": "3",
+      "customerID": "23"
+    }
+  ];
+  res.render('orders', context);
 });
 
 
@@ -202,6 +311,6 @@ app.use(function (err, req, res, next) {
 });
 
 app.listen(app.get('port'), function () {
-  console.log('Express started on flip1.engr.oregonstate.edu:' + app.get('port') + '; press Ctrl-C to terminate.');
+  console.log('Express started on flip1.engr.oregonstate.edu:' + app.get('port') + ' OR localhost:8877; press Ctrl-C to terminate.');
 });
 

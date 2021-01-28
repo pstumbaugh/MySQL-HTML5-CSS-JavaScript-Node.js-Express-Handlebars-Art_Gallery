@@ -5,23 +5,27 @@
 var addButton = document.createElement("button");
 var addButtonText = document.textContent = "Submit";
 addButton.appendChild(document.createTextNode(addButtonText));
-document.getElementById("galleryAdderButton").appendChild(addButton);
+document.getElementById("customerAdderButton").appendChild(addButton);
 
 //When client clicks the add a gallery submit button:
 function addButtonClick() {
   var req = new XMLHttpRequest(); //create new request
 
   //get the values entered by user
-  var payloadGalleryName = document.getElementById("galleryNameForm").value;
+  var payloadCustomerFirstName = document.getElementById("customerFirstName").value;
+  var payloadCustomerLastName = document.getElementById("customerLastName").value;
+
 
   //if one of the items in the table is not filled out, display error about that item
   //(after this, it will check all items are filled in. If not, it will error and not add to table)
-  if (payloadGalleryName == undefined || payloadGalleryName == "") {
-    document.getElementById("addErrorName").textContent = "ERROR: Missing gallery name";
+  if (payloadCustomerFirstName == undefined || payloadCustomerFirstName == "") {
+    document.getElementById("addErrorName").textContent = "ERROR: Missing first name";
+  } else if (payloadCustomerLastName == undefined || payloadCustomerLastName == "") {
+    document.getElementById("addErrorName").textContent = "ERROR: Missing last name";
   };
 
   //check if all items are fileld out. If so, continue on sending the data to the database, else display error and don't do anything
-  if (payloadGalleryName != "") {
+  if (payloadCustomerFirstName != "" || payloadCustomerLastName != "") {
     //send an insert request to our server via GET
     req.open("GET", "http://flip1.engr.oregonstate.edu:8877insert?galleryID=" + payloadGalleryName, true);
 
