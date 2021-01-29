@@ -14,6 +14,16 @@ td {
   border: 1px solid black;
 }
 
+fieldset {
+  background-color: rgb(243, 243, 243);
+  width: 400px;
+}
+
+legend {
+  font-size: 20px;
+  font-weight: bold;
+}
+
 .homePageButton {
   background-color: rgb(94, 94, 94);
   color: white;
@@ -25,10 +35,13 @@ td {
   display: inline-block;
   font-size: 16px;
   border-radius: 8px;
+  left: 20px;
+  position: relative;
+
 }
 
 .homePageButton:hover {
-  background-color: darkgoldenrod;
+  background-color: rgb(00, 196, 180);;
   color: white;
 }
 
@@ -46,6 +59,57 @@ td {
 }
 
 .homeButton:hover {
-  background-color: rgb(129, 129, 129);
+  background-color: rgb(00, 196, 180);
   color: white;
+}
+
+#homePageHeader {
+  font-family:Bradley Hand, Florence, serif;
+  font-size: 50px;
+  text-transform: capitalize;
+}
+
+#homePageBody {
+  background-image: url('./images/WhiteToLightBlue.jpg');
+  background-size: cover;
+}
+
+#artistsBody {
+  background-image: url('./images/DarkBlueToGreen.jpg');
+  background-size: cover;
+  background-blend-mode: soft-light;
+}
+
+#customersBody {
+  background-image: url('./images/lightBlueAndBlue.jpg');
+  background-size: cover;
+  background-blend-mode: soft-light;
+}
+
+#galleriesBody {
+  background-image: url('./images/lightGrenToDarkBlue.jpg');
+  background-size: cover;
+  background-blend-mode: soft-light;
+}
+
+#ordersBody {
+  background-image: url('./images/pinkAndGreenBlue.jpg');
+  background-size: cover;
+  background-blend-mode: soft-light;
+}
+
+#paintingsBody {
+  background-image: url('./images/whiteToDarkBlue.jpg');
+  background-size: cover;
+  background-blend-mode: soft-light;
+}
+
+#searchBody {
+  background-image: url('./images/whiteToDarkBlue.jpg');
+  background-size: cover;
+  background-blend-mode: soft-light;
+}
+
+#currentTable {
+  background-color: rgb(243, 243, 243);
 }
