@@ -12,14 +12,15 @@
   <button class="homeButton" type="button" onclick="location.href='/'">HOME</button>
 
   <h1>Customers Results:</h1>
-  <br>
 
   <!--Display our current data table-->
   <table id="currentTable">
     <th>Customer ID</th>
     <th>First Name</th>
     <th>Last Name</th>
-
+    <th></th>
+    <th></th>
+    
     {{#each dataList}}
     <tr id="newRow">
       <td id="customerID">{{this.customerID}}</td>

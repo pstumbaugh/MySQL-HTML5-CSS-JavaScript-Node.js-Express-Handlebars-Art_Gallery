@@ -12,14 +12,14 @@
   <button class="homeButton" type="button" onclick="location.href='/'">HOME</button>
 
   <h1>Artists Results:</h1>
-  <br>
 
   <!--Display our current data table-->
   <table id="currentTable">
     <th>Artist ID</th>
     <th>First Name</th>
     <th>Last Name</th>
-
+    <th></th>
+    <th></th>
     {{#each dataList}}
     <tr id="newRow">
       <td id="artistID">{{this.artistID}}</td>
@@ -32,8 +32,6 @@
     </tr>
     {{/each}}
   </table>
-
-
   <!-- If no information in table, show text saying no information -->
   <h3 id="noDataTag"></h3>
 
@@ -45,7 +43,7 @@
       <label for="artistFirstNameLabel">Artist First Name: </label>
       <input type="text" name="artistFirstNameForm" id="artistFirstNameForm"></input>
       <br>
-    <label for="artistLastNameLabel">Artist Last Name: </label>
+      <label for="artistLastNameLabel">Artist Last Name: </label>
       <input type="text" name="artistLastNameForm" id="artistLastNameForm"></input>
       <br>
       <div id="artistAdderButton">
