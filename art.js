@@ -185,6 +185,14 @@ app.get('/orders', function (req, res, next) {
   res.render('orders', context);
 });
 
+//galleries page
+app.get('/search', function (req, res, next) {
+  var context = {};
+  //test data:
+  context.dataList = [];
+  res.render('search', context);
+});
+
 
 /*
 //home page setup POST
