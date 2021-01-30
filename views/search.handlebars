@@ -12,8 +12,22 @@
   <button class="homeButton" type="button" onclick="location.href='/'">HOME</button>
 
   <h1>Custom Search:</h1>
+  <form>
+  <fieldset>
+    <legend>Search</legend>
+    <ul style="list-style-type:none;">
+      <li><input type="checkbox" id="customerSearch"> Customer Last Name</input>
+      <li><input type="checkbox" id="paintingSearch"> Painting Name</input>
+      <li><input type="checkbox" id="orderSearch"> Order ID</input>
+    </ul>
+    <input type="text" name="searchForm" id="searchForm"></input>
+    <br>
+    <div id="searchButton">
+    </div>
+  </fieldset>
+  </form>
 
-
+  <h1>Search Results:</h1>
 
   <script src="searchScript.js"></script>
 </body>

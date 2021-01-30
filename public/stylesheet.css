@@ -53,7 +53,23 @@ th:last-of-type {
 }
 /* end of TABLE style*/
 
+/* Checkbox style */
+input[type="checkbox" i] {
+  background-color: initial;
+  cursor: default;
+  appearance: auto;
+  box-sizing: border-box;
+  margin: 0px 0px 0px 0px;
+  padding: 0;
+  border: 0;
+  width: 5%;
+}
 
+ul{
+padding-inline-start: 5px;
+}
+
+/* end of Checkbox style*/
 
 /* FORM style */
 fieldset {
