@@ -17,18 +17,15 @@ function addButtonClick() {
 
   //if one of the items in the table is not filled out, display error about that item
   //(after this, it will check all items are filled in. If not, it will error and not add to table)
-  if (payloadCustomerFirstName == undefined || payloadCustomerFirstName == "") {
-    document.getElementById("addErrorNameCustomerFirstName").textContent = "ERROR: Missing first name";
-    event.preventDefault();
-  } else document.getElementById("addErrorNameCustomerFirstName").textContent = "";
   if (payloadCustomerLastName == undefined || payloadCustomerLastName == "") {
     document.getElementById("addErrorNameCustomerLastName").textContent = "ERROR: Missing last name";
     event.preventDefault();
   } else document.getElementById("addErrorNameCustomerLastName").textContent = "";
-  
+  //firstName left out because it can remain NULL
+
 
   //check if all items are fileld out. If so, continue on sending the data to the database, else display error and don't do anything
-  if (payloadCustomerFirstName != "" || payloadCustomerLastName != "") {
+  if (payloadCustomerLastName != "") {
     //send an insert request to our server via GET
     req.open("GET", "http://flip1.engr.oregonstate.edu:8877insert?galleryID=" + payloadGalleryName, true);
 

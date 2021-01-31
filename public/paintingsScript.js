@@ -36,13 +36,10 @@ function addButtonClick() {
     document.getElementById("addErrorNameGalleryID").textContent = "ERROR: Missing gallery ID";
     event.preventDefault();
   } else document.getElementById("addErrorNameGalleryID").textContent = "";
-  if (payloadOrderID == undefined || payloadOrderID == "") {
-    document.getElementById("addErrorNameOrderID").textContent = "ERROR: Missing order ID";
-    event.preventDefault();
-  } else document.getElementById("addErrorNameOrderID").textContent = "";
+//orderID left out as it can remain NULL
 
   //check if all items are fileld out. If so, continue on sending the data to the database, else display error and don't do anything
-  if (payloadArtistID != "" || payloadArtType != "" || payloadPrice != "" || payloadGalleryID != "" || payloadOrderID != "") {
+  if (payloadArtistID != "" || payloadArtType != "" || payloadPrice != "" || payloadGalleryID != "") {
     //send an insert request to our server via GET
     req.open("GET", "http://flip1.engr.oregonstate.edu:8877insert?galleryID=" + payloadGalleryName, true);
 

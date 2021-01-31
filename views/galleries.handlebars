@@ -19,14 +19,17 @@
     <th>Gallery Name</th>
     <th></th>
     <th></th>
-    
+
     {{#each dataList}}
     <tr id="newRow">
       <td id="galleryID">{{this.galleryID}}</td>
       <td id="galleryName">{{this.galleryName}}</td>
 
       <td><button type="button" onclick="deleteRow('currentTable',this)">Delete</button></td>
-      <td><button type="button" onclick="location.href='__________'+{{this.galleryID}}">Update</button>
+      <td><button type="button" onclick="location.href='/updateGalleries'">Update</button>
+        <!--EXAMPLE when hooked to backend:
+      <td><button type="button" onclick="location.href='/updateArtists?id='+{{this.artistID}}">Update</button> -->
+
       </td>
     </tr>
     {{/each}}
@@ -40,11 +43,13 @@
   <form>
     <fieldset>
       <legend>Add a Gallery</legend>
-      <label for="galleryNameLabel">Gallery Name: </label>
+      <label for="galleryNameLabel">*Gallery Name: </label>
       <input type="text" name="galleryNameForm" id="galleryNameForm"></input>
       <br>
       <div id="galleryAdderButton">
       </div>
+
+      <p id="requirement">* required entry</p>
 
       <!-- display any missing NOT NULL items -->
       <div><b id="addErrorNameGalleryName"></b></div>

@@ -27,7 +27,9 @@
       <td id="artistLastName">{{this.artistLastName}}</td>
 
       <td><button type="button" onclick="deleteRow('currentTable',this)">Delete</button></td>
-      <td><button type="button" onclick="location.href='__________'+{{this.artistID}}">Update</button>
+      <td><button type="button" onclick="location.href='/updateArtists'">Update</button>
+        <!--EXAMPLE when hooked to backend:
+      <td><button type="button" onclick="location.href='/updateArtists?id='+{{this.artistID}}">Update</button> -->
       </td>
     </tr>
     {{/each}}
@@ -43,11 +45,12 @@
       <label for="artistFirstNameLabel">Artist First Name: </label>
       <input type="text" name="artistFirstNameForm" id="artistFirstNameForm"></input>
       <br>
-      <label for="artistLastNameLabel">Artist Last Name: </label>
+      <label for="artistLastNameLabel">*Artist Last Name: </label>
       <input type="text" name="artistLastNameForm" id="artistLastNameForm"></input>
-      <br>
       <div id="artistAdderButton">
       </div>
+      
+      <p id="requirement">* required entry</p>
 
       <!-- display any missing NOT NULL items -->
       <div><b id="addErrorNameArtistFirstName"></b></div>

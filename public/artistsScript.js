@@ -18,18 +18,15 @@ function addButtonClick() {
 
   //if one of the items in the table is not filled out, display error about that item
   //(after this, it will check all items are filled in. If not, it will error and not add to table)
-  if (payloadArtistFirstName == undefined || payloadArtistFirstName == "") {
-    document.getElementById("addErrorNameArtistFirstName").textContent = "ERROR: Missing first name";
-    event.preventDefault();
-  } else document.getElementById("addErrorNameArtistFirstName").textContent = "";
   if (payloadArtistLastName == undefined || payloadArtistLastName == "") {
     document.getElementById("addErrorNameArtistLastName").textContent = "ERROR: Missing last name";
     event.preventDefault();
   } else document.getElementById("addErrorNameArtistLastName").textContent = "";
+  //artist firstName left out as it can be NULL
   
 
   //check if all items are fileld out. If so, continue on sending the data to the database, else display error and don't do anything
-  if (payloadArtistFirstName != "" || payloadArtistLastName != "") {
+  if (payloadArtistLastName != "") {
     //send an insert request to our server via GET
     req.open("GET", "http://flip1.engr.oregonstate.edu:8877insert?galleryID=" + payloadArtistFirstName, true);
 

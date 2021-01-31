@@ -23,7 +23,7 @@
     <th>Order ID</th>
     <th></th>
     <th></th>
-    
+
     {{#each dataList}}
     <tr id="newRow">
       <td id="paintingID">{{this.paintingID}}</td>
@@ -34,7 +34,9 @@
       <td id="orderID">{{this.orderID}}</td>
 
       <td><button type="button" onclick="deleteRow('currentTable',this)">Delete</button></td>
-      <td><button type="button" onclick="location.href='__________'+{{this.paintingID}}">Update</button>
+      <td><button type="button" onclick="location.href='/updatePaintings'">Update</button>
+        <!--EXAMPLE when hooked to backend:
+      <td><button type="button" onclick="location.href='/updateArtists?id='+{{this.artistID}}">Update</button> -->
       </td>
     </tr>
     {{/each}}
@@ -48,16 +50,16 @@
   <form>
     <fieldset>
       <legend>Add a Painting</legend>
-      <label for="artistIDLable">Artist ID: </label>
+      <label for="artistIDLable">*Artist ID: </label>
       <input type="text" name="artistIDForm" id="artistIDForm"></input>
       <br>
-      <label for="artTypeLabel">Art Type: </label>
+      <label for="artTypeLabel">*Art Type: </label>
       <input type="text" name="artTypeForm" id="artTypeForm"></input>
       <br>
-      <label for="priceLabel">Price (in $): </label>
+      <label for="priceLabel">*Price (in $): </label>
       <input type="text" name="priceForm" id="priceForm"></input>
       <br>
-      <label for="galleryIDLabel">Gallery ID: </label>
+      <label for="galleryIDLabel">*Gallery ID: </label>
       <input type="text" name="galleryIDForm" id="galleryIDForm"></input>
       <br>
       <label for="orderIDLabel">Order ID: </label>
@@ -65,6 +67,8 @@
       <br>
       <div id="paintingAdderButton">
       </div>
+
+      <p id="requirement">* required entry</p>
 
       <!-- display any missing NOT NULL items -->
       <div><b id="addErrorNameArtistID"></b></div>

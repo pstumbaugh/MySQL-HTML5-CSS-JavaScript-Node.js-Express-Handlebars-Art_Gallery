@@ -74,7 +74,7 @@ padding-inline-start: 5px;
 /* FORM style */
 fieldset {
   background-color: rgb(243, 243, 243);
-  width: 400px;
+  width: 500px;
 }
 
 legend {
@@ -98,6 +98,11 @@ form label{
 
 form input {
   width: 60%;
+}
+
+#requirement {
+  font-size: 15px;
+  text-align: right;
 }
 /* end of FORM style */
 

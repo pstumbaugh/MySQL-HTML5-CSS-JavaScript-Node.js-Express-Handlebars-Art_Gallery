@@ -20,7 +20,7 @@
     <th>Last Name</th>
     <th></th>
     <th></th>
-    
+
     {{#each dataList}}
     <tr id="newRow">
       <td id="customerID">{{this.customerID}}</td>
@@ -28,7 +28,9 @@
       <td id="customerLastName">{{this.customerLastName}}</td>
 
       <td><button type="button" onclick="deleteRow('currentTable',this)">Delete</button></td>
-      <td><button type="button" onclick="location.href='__________'+{{this.customerID}}">Update</button>
+      <td><button type="button" onclick="location.href='/updateCustomers'">Update</button>
+        <!--EXAMPLE when hooked to backend:
+      <td><button type="button" onclick="location.href='/updateArtists?id='+{{this.artistID}}">Update</button> -->
       </td>
     </tr>
     {{/each}}
@@ -46,11 +48,13 @@
       <label for="customerFirstNameLabel">Customer First Name: </label>
       <input type="text" name="customerFirstNameForm" id="customerFirstNameForm"></input>
       <br>
-    <label for="customerLastNameLabel">Customer Last Name: </label>
+      <label for="customerLastNameLabel">*Customer Last Name: </label>
       <input type="text" name="customerLastNameForm" id="customerLastNameForm"></input>
       <br>
       <div id="customerAdderButton">
       </div>
+
+      <p id="requirement">* required entry</p>
 
       <!-- display any missing NOT NULL items -->
       <div><b id="addErrorNameCustomerFirstName"></b></div>

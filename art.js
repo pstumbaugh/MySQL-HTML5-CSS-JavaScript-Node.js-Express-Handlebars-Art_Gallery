@@ -121,7 +121,7 @@ app.get('/paintings', function (req, res, next) {
       "artType": "Contemporary",
       "price": "8000",
       "galleryID": "3",
-      "orderID": ""    
+      "orderID": ""
     },
     {
       "paintingID": "3",
@@ -203,23 +203,143 @@ app.get('/search', function (req, res, next) {
       "customerID": "23"
     }
   ];
-  context.moreDataList = [
+  res.render('search', context);
+});
+
+
+//updates a row from the SQL table using the ID number
+app.get('/updateArtists', function (req, res, next) {
+  var context = {};
+
+  /*
+  mysql.pool.query('SELECT * FROM workouts WHERE id=?', [req.query.id], function (err, rows, fields) {
+    if (err) {
+      next(err);
+      return;
+    }
+    var qParams = [];
+    for (var p in rows.query) {
+      qParams.push({
+        'name': p,
+        'reps': rows.query[p]
+      })
+    }
+    context.dataList = rows;
+  */
+  context.dataList = [
     {
-      "paintingID": "1",
       "artistID": "5",
-      "artType": "Abstract",
-      "price": "22000",
-      "galleryID": "1",
-      "orderID": "10"
-    },
+      "artistFirstName": "Vincent",
+      "artistLastName": "van Gogh"
+    }];
+  res.render('updateArtists', context);
+});
+
+//updates a row from the SQL table using the ID number
+app.get('/updateCustomers', function (req, res, next) {
+  var context = {};
+
+  /*
+  mysql.pool.query('SELECT * FROM workouts WHERE id=?', [req.query.id], function (err, rows, fields) {
+    if (err) {
+      next(err);
+      return;
+    }
+    var qParams = [];
+    for (var p in rows.query) {
+      qParams.push({
+        'name': p,
+        'reps': rows.query[p]
+      })
+    }
+    context.dataList = rows;
+  */
+  context.dataList = [
     {
-      "paintingID": "2",
-      "artistID": "15",
-      "artType": "Contemporary",
-      "price": "8000",
+      "customerID": "14",
+      "customerFirstName": "Neil",
+      "customerLastName": "Armstrong"
+    }];
+  res.render('updateCustomers', context);
+});
+
+
+//updates a row from the SQL table using the ID number
+app.get('/updateGalleries', function (req, res, next) {
+  var context = {};
+
+  /*
+  mysql.pool.query('SELECT * FROM workouts WHERE id=?', [req.query.id], function (err, rows, fields) {
+    if (err) {
+      next(err);
+      return;
+    }
+    var qParams = [];
+    for (var p in rows.query) {
+      qParams.push({
+        'name': p,
+        'reps': rows.query[p]
+      })
+    }
+    context.dataList = rows;
+  */
+  context.dataList = [
+    {
       "galleryID": "3",
-      "orderID": ""    
-    },
+      "galleryName": "MET"
+    }];
+  res.render('updateGalleries', context);
+});
+
+
+//updates a row from the SQL table using the ID number
+app.get('/updateOrders', function (req, res, next) {
+  var context = {};
+
+  /*
+  mysql.pool.query('SELECT * FROM workouts WHERE id=?', [req.query.id], function (err, rows, fields) {
+    if (err) {
+      next(err);
+      return;
+    }
+    var qParams = [];
+    for (var p in rows.query) {
+      qParams.push({
+        'name': p,
+        'reps': rows.query[p]
+      })
+    }
+    context.dataList = rows;
+  */
+  context.dataList = [
+    {
+      "orderID": "3",
+      "customerID": "23"
+    }];
+  res.render('updateOrders', context);
+});
+
+
+//updates a row from the SQL table using the ID number
+app.get('/updatePaintings', function (req, res, next) {
+  var context = {};
+
+  /*
+  mysql.pool.query('SELECT * FROM workouts WHERE id=?', [req.query.id], function (err, rows, fields) {
+    if (err) {
+      next(err);
+      return;
+    }
+    var qParams = [];
+    for (var p in rows.query) {
+      qParams.push({
+        'name': p,
+        'reps': rows.query[p]
+      })
+    }
+    context.dataList = rows;
+  */
+  context.dataList = [
     {
       "paintingID": "3",
       "artistID": "10",
@@ -227,20 +347,41 @@ app.get('/search', function (req, res, next) {
       "price": "2500",
       "galleryID": "2",
       "orderID": "4"
-    },
-    {
-      "paintingID": "4",
-      "artistID": "3",
-      "artType": "Impressionist",
-      "price": "16000",
-      "galleryID": "1",
-      "orderID": ""
-    }
-  ];
-  res.render('search', context);
+    }];
+  res.render('updatePaintings', context);
 });
 
 
+
+
+
+
+
+//Updates a row based on the ID number
+//Will only update if a parameter is given. If it is left blank, the table will not update it and
+// will retain whatever information was already in that position
+app.get('/safe-update', function (req, res, next) {
+  var context = {};
+  mysql.pool.query("SELECT * FROM workouts WHERE id=?", [req.query.id], function (err, result) {
+    if (err) {
+      next(err);
+      return;
+    }
+    if (result.length == 1) {
+      var curVals = result[0];
+      mysql.pool.query("UPDATE workouts SET name=?, reps=?, weight=?, date=?, unit=? WHERE id=? ",
+        [req.query.name || curVals.name, req.query.reps || curVals.reps, req.query.weight || curVals.weight, req.query.date || curVals.date, req.query.unit || curVals.unit, req.query.id],
+        function (err, result) {
+          if (err) {
+            next(err);
+            return;
+          }
+          context.results = "Updated " + result.changedRows + " rows.";
+          res.render('home', context);
+        });
+    }
+  });
+});
 
 
 /*
@@ -303,58 +444,8 @@ app.get('/delete', function (req, res, next) {
 });
 */
 
-/*
-//updates a row from the SQL table using the ID number
-app.get('/updateItem', function (req, res, next) {
-  var context = {};
-
-  mysql.pool.query('SELECT * FROM workouts WHERE id=?', [req.query.id], function (err, rows, fields) {
-    if (err) {
-      next(err);
-      return;
-    }
-    var qParams = [];
-    for (var p in rows.query) {
-      qParams.push({
-        'name': p,
-        'reps': rows.query[p]
-      })
-    }
-    context.dataList = rows;
-    res.render('update', context);
-  });
-});
-*/
 
 
-
-/*
-//Updates a row based on the ID number
-//Will only update if a parameter is given. If it is left blank, the table will not update it and
-// will retain whatever information was already in that position
-app.get('/safe-update', function (req, res, next) {
-  var context = {};
-  mysql.pool.query("SELECT * FROM workouts WHERE id=?", [req.query.id], function (err, result) {
-    if (err) {
-      next(err);
-      return;
-    }
-    if (result.length == 1) {
-      var curVals = result[0];
-      mysql.pool.query("UPDATE workouts SET name=?, reps=?, weight=?, date=?, unit=? WHERE id=? ",
-        [req.query.name || curVals.name, req.query.reps || curVals.reps, req.query.weight || curVals.weight, req.query.date || curVals.date, req.query.unit || curVals.unit, req.query.id],
-        function (err, result) {
-          if (err) {
-            next(err);
-            return;
-          }
-          context.results = "Updated " + result.changedRows + " rows.";
-          res.render('home', context);
-        });
-    }
-  });
-});
-*/
 
 app.use(function (req, res) {
   res.status(404);
