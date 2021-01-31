@@ -203,6 +203,40 @@ app.get('/search', function (req, res, next) {
       "customerID": "23"
     }
   ];
+  context.moreDataList = [
+    {
+      "paintingID": "1",
+      "artistID": "5",
+      "artType": "Abstract",
+      "price": "22000",
+      "galleryID": "1",
+      "orderID": "10"
+    },
+    {
+      "paintingID": "2",
+      "artistID": "15",
+      "artType": "Contemporary",
+      "price": "8000",
+      "galleryID": "3",
+      "orderID": ""    
+    },
+    {
+      "paintingID": "3",
+      "artistID": "10",
+      "artType": "Pop",
+      "price": "2500",
+      "galleryID": "2",
+      "orderID": "4"
+    },
+    {
+      "paintingID": "4",
+      "artistID": "3",
+      "artType": "Impressionist",
+      "price": "16000",
+      "galleryID": "1",
+      "orderID": ""
+    }
+  ];
   res.render('search', context);
 });
 

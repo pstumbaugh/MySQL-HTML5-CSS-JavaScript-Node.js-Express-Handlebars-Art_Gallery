@@ -11,6 +11,7 @@
 
   <button class="homeButton" type="button" onclick="location.href='/'">HOME</button>
 
+<!-- Customer Search form -->
   <h1>Custom Search:</h1>
   <form>
   <fieldset>
@@ -27,24 +28,21 @@
   </fieldset>
   </form>
 
+<!--Search Results table - Gets data from backend json file in context.dataList -->
   <h1>Search Results:</h1>
   <table id="searchTable">
     <thead>
       <tr>
-      {{#each dataList}}
-      console.log({{@key}});
+      {{#each dataList.[0]}} <!--Gets name of attributes-->
         <th>{{@key}}</th>
       {{/each}}
       </tr>
     </thead>
-    <th></th>
-    <th></th>
-    
     <tbody>
       {{#each dataList}}
         <tr>
-          {{#each this}}
-            <td>{{this}}</td>
+          {{#each this}} 
+            <td>{{this}}</td> <!--gets data sent in that attribute-->
           {{/each}}
         </tr>
       {{/each}}
