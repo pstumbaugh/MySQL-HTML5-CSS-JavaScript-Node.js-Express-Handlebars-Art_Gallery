@@ -21,16 +21,25 @@ function addButtonClick() {
   //if one of the items in the table is not filled out, display error about that item
   //(after this, it will check all items are filled in. If not, it will error and not add to table)
   if (payloadArtistID == undefined || payloadArtistID == "") {
-    document.getElementById("addErrorName").textContent = "ERROR: Missing artist ID";
-  } else if (payloadArtType == undefined || payloadArtType == "") {
-    document.getElementById("addErrorName").textContent = "ERROR: Missing art type";
-  } else if (payloadPrice == undefined || payloadPrice == "") {
-    document.getElementById("addErrorName").textContent = "ERROR: Missing price";
-  } else if (payloadGalleryID == undefined || payloadGalleryID == "") {
-    document.getElementById("addErrorName").textContent = "ERROR: Missing gallery ID";
-  } else if (payloadOrderID == undefined || payloadOrderID == "") {
-    document.getElementById("addErrorName").textContent = "ERROR: Missing order ID";
-  };
+    document.getElementById("addErrorNameArtistID").textContent = "ERROR: Missing artist ID";
+    event.preventDefault();
+  } else document.getElementById("addErrorNameArtistID").textContent = "";
+  if (payloadArtType == undefined || payloadArtType == "") {
+    document.getElementById("addErrorNameArtType").textContent = "ERROR: Missing art type";
+    event.preventDefault();
+  } else document.getElementById("addErrorNameArtType").textContent = "";
+  if (payloadPrice == undefined || payloadPrice == "") {
+    document.getElementById("addErrorNamePrice").textContent = "ERROR: Missing price";
+    event.preventDefault();
+  } else document.getElementById("addErrorNamePrice").textContent = "";
+  if (payloadGalleryID == undefined || payloadGalleryID == "") {
+    document.getElementById("addErrorNameGalleryID").textContent = "ERROR: Missing gallery ID";
+    event.preventDefault();
+  } else document.getElementById("addErrorNameGalleryID").textContent = "";
+  if (payloadOrderID == undefined || payloadOrderID == "") {
+    document.getElementById("addErrorNameOrderID").textContent = "ERROR: Missing order ID";
+    event.preventDefault();
+  } else document.getElementById("addErrorNameOrderID").textContent = "";
 
   //check if all items are fileld out. If so, continue on sending the data to the database, else display error and don't do anything
   if (payloadArtistID != "" || payloadArtType != "" || payloadPrice != "" || payloadGalleryID != "" || payloadOrderID != "") {

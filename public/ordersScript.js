@@ -12,16 +12,18 @@ function addButtonClick() {
   var req = new XMLHttpRequest(); //create new request
 
   //get the values entered by user
-  var payloadGalleryName = document.getElementById("customerIDForm").value;
+  var payloadCustomerID = document.getElementById("customerIDForm").value;
 
   //if one of the items in the table is not filled out, display error about that item
   //(after this, it will check all items are filled in. If not, it will error and not add to table)
-  if (payloadGalleryName == undefined || payloadGalleryName == "") {
-    document.getElementById("addErrorName").textContent = "ERROR: Missing customer ID";
-  };
+  if (payloadCustomerID == undefined || payloadCustomerID == "") {
+    document.getElementById("addErrorNameCustomerID").textContent = "ERROR: Missing customer ID number";
+    event.preventDefault();
+  } else document.getElementById("addErrorNameCustomerID").textContent = "";
+
 
   //check if all items are fileld out. If so, continue on sending the data to the database, else display error and don't do anything
-  if (payloadGalleryName != "") {
+  if (payloadCustomerID != "") {
     //send an insert request to our server via GET
     req.open("GET", "http://flip1.engr.oregonstate.edu:8877insert?galleryID=" + payloadGalleryName, true);
 

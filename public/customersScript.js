@@ -12,17 +12,20 @@ function addButtonClick() {
   var req = new XMLHttpRequest(); //create new request
 
   //get the values entered by user
-  var payloadCustomerFirstName = document.getElementById("customerFirstName").value;
-  var payloadCustomerLastName = document.getElementById("customerLastName").value;
-
+  var payloadCustomerFirstName = document.getElementById("customerFirstNameForm").value;
+  var payloadCustomerLastName = document.getElementById("customerLastNameForm").value;
 
   //if one of the items in the table is not filled out, display error about that item
   //(after this, it will check all items are filled in. If not, it will error and not add to table)
   if (payloadCustomerFirstName == undefined || payloadCustomerFirstName == "") {
-    document.getElementById("addErrorName").textContent = "ERROR: Missing first name";
-  } else if (payloadCustomerLastName == undefined || payloadCustomerLastName == "") {
-    document.getElementById("addErrorName").textContent = "ERROR: Missing last name";
-  };
+    document.getElementById("addErrorNameCustomerFirstName").textContent = "ERROR: Missing first name";
+    event.preventDefault();
+  } else document.getElementById("addErrorNameCustomerFirstName").textContent = "";
+  if (payloadCustomerLastName == undefined || payloadCustomerLastName == "") {
+    document.getElementById("addErrorNameCustomerLastName").textContent = "ERROR: Missing last name";
+    event.preventDefault();
+  } else document.getElementById("addErrorNameCustomerLastName").textContent = "";
+  
 
   //check if all items are fileld out. If so, continue on sending the data to the database, else display error and don't do anything
   if (payloadCustomerFirstName != "" || payloadCustomerLastName != "") {

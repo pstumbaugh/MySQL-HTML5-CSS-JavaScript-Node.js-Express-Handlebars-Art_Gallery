@@ -17,8 +17,10 @@ function addButtonClick() {
   //if one of the items in the table is not filled out, display error about that item
   //(after this, it will check all items are filled in. If not, it will error and not add to table)
   if (payloadGalleryName == undefined || payloadGalleryName == "") {
-    document.getElementById("addErrorName").textContent = "ERROR: Missing gallery name";
-  };
+    document.getElementById("addErrorNameGalleryName").textContent = "ERROR: Missing gallery name";
+    event.preventDefault();
+  } else document.getElementById("addErrorNameGalleryName").textContent = "";
+
 
   //check if all items are fileld out. If so, continue on sending the data to the database, else display error and don't do anything
   if (payloadGalleryName != "") {
