@@ -185,13 +185,28 @@ app.get('/orders', function (req, res, next) {
   res.render('orders', context);
 });
 
-//galleries page
+//search page
 app.get('/search', function (req, res, next) {
   var context = {};
   //test data:
-  context.dataList = [];
+  context.dataList = [
+    {
+      "orderID": "1",
+      "customerID": "14"
+    },
+    {
+      "orderID": "2",
+      "customerID": "5"
+    },
+    {
+      "orderID": "3",
+      "customerID": "23"
+    }
+  ];
   res.render('search', context);
 });
+
+
 
 
 /*

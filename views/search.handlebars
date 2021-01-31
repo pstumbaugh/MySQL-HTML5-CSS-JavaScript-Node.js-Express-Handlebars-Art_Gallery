@@ -28,7 +28,27 @@
   </form>
 
   <h1>Search Results:</h1>
-
+  <table id="searchtTable">
+    <thead>
+      <tr>
+      {{#each datalist.[0]}}
+        <th>{{@key}}</th>
+      {{/each}}
+      </tr>
+    </thead>
+    <th></th>
+    <th></th>
+    
+    <tbody>
+      {{#each datalist}}
+        <tr>
+          {{#each this}}
+            <td>{{this}}</td>
+          {{/each}}
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
   <script src="searchScript.js"></script>
 </body>
 
