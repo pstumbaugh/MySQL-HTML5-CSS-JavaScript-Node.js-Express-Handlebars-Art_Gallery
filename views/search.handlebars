@@ -28,10 +28,11 @@
   </form>
 
   <h1>Search Results:</h1>
-  <table id="searchtTable">
+  <table id="searchTable">
     <thead>
       <tr>
-      {{#each datalist.[0]}}
+      {{#each dataList}}
+      console.log({{@key}});
         <th>{{@key}}</th>
       {{/each}}
       </tr>
@@ -40,7 +41,7 @@
     <th></th>
     
     <tbody>
-      {{#each datalist}}
+      {{#each dataList}}
         <tr>
           {{#each this}}
             <td>{{this}}</td>
