@@ -9,11 +9,12 @@ document.getElementById("paintingSearch").onchange = paintingSearch;
 document.getElementById("orderSearch").onchange = orderSearch;
 var searchType = null;
 
-//When client clicks the search button
+//When client clicks the search buttonpp
 function addButtonClick() {
     var req = new XMLHttpRequest(); //create new request
   }
 
+// Creating exclusive checkboxes and setting searchType
 function customerSearch() {
     if (document.getElementById("paintingSearch").checked) {
             document.getElementById("paintingSearch").checked = false;
