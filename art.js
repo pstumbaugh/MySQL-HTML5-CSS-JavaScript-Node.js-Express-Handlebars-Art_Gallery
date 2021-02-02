@@ -17,8 +17,17 @@ app.use(express.static('public'));
 //Get and display (send back) all the items from the SQL table
 app.get('/', function (req, res, next) {
   var context = {};
+  res.render('home', context);
+});
 
-  /*
+//home page setup
+//Get and display (send back) all the items from the SQL table
+app.get('/index', function (req, res, next) {
+  var context = {};
+  res.render('home', context);
+});
+
+  /* EXAMPLE CODING FOR TABLES
   mysql.pool.query('SELECT * FROM table_name', function(err, rows, fields) {
     if (err) {
       next(err);
@@ -35,8 +44,7 @@ app.get('/', function (req, res, next) {
     res.render('home', context);
   });
   */
-  res.render('home', context);
-});
+
 
 //artists page
 app.get('/artists', function (req, res, next) {
@@ -459,6 +467,6 @@ app.use(function (err, req, res, next) {
 });
 
 app.listen(app.get('port'), function () {
-  console.log('Express started on flip1.engr.oregonstate.edu:' + app.get('port') + ' OR localhost:8877; press Ctrl-C to terminate.');
+  console.log('Express started on flip1.engr.oregonstate.edu:' + app.get('port') + ' OR localhost:' + app.get('port') + '; press Ctrl-C to terminate.');
 });
 

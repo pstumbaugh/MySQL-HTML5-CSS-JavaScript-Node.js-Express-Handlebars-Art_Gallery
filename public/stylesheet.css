@@ -112,6 +112,7 @@ h1 {
   font-family:Bradley Hand, Florence, serif;
   font-size: 30px;
   text-transform: capitalize;
+  text-shadow: 0 0 3px white, 0 0 5px white, 0 0 5px white, 0 0 5px white, 0 0 5px white, 0 0 3px white, 0 0 5px white, 0 0 5px white, 0 0 5px white, 0 0 5px white;
 }
 
 .homePageButton {
