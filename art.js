@@ -8,10 +8,9 @@ var handlebars = require('express-handlebars').create({
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('port', 8877);
+app.set('port', 8878);
 
 app.use(express.static('public'));
-
 
 //home page setup
 //Get and display (send back) all the items from the SQL table
@@ -27,24 +26,66 @@ app.get('/index', function (req, res, next) {
   res.render('home', context);
 });
 
-  /* EXAMPLE CODING FOR TABLES
+/* EXAMPLE CODING FOR TABLES
+  var context = {};
   mysql.pool.query('SELECT * FROM table_name', function(err, rows, fields) {
-    if (err) {
+  if (err) {
+    next(err);
+    return;
+  }
+  var qParams = [];
+  for (var p in rows.query) {
+    qParams.push({
+      'name': p,
+      'reps': rows.query[p]
+    })
+  }
+  context.dataList = rows;
+  res.render('home', context);
+});
+*/
+
+//TESTING!! - AJAX DELETE FUNCTION
+app.delete('/deleteArtist/:id', function (req, res) {
+  //var mysql = req.app.get('mysql');
+  var sql = "DELETE FROM artistsTest WHERE artistID = ?";
+  var inserts = [req.params.id];
+  sql = mysql.pool.query(sql, inserts, function (error, results, fields) {
+    if (error) {
+      console.log(error)
+      res.write(JSON.stringify(error));
+      res.status(400);
+      res.end();
+    } else {
+      res.status(202).end();
+    }
+  })
+});
+
+
+
+//TESTING! get artists from table page
+app.get('/artistsTest', function (req, res) {
+  var context = {};
+  mysql.pool.query('SELECT * FROM artistsTest', function (err, rows, fields) {
+    if (err) { //if error, retur error message
       next(err);
       return;
     }
+    //else iterate through table, using qParams to push items to rows. Then set
+    //dataList as rows and render page
     var qParams = [];
     for (var p in rows.query) {
       qParams.push({
-        'name': p,
-        'reps': rows.query[p]
+        'artistID': rows.query[p],
+        'artistFirstName': rows.query[p],
+        'artistLastName': rows.query[p],
       })
     }
     context.dataList = rows;
-    res.render('home', context);
-  });
-  */
-
+    res.render('artistsTest', context);
+  })
+});
 
 //artists page
 app.get('/artists', function (req, res, next) {
@@ -77,6 +118,8 @@ app.get('/artists', function (req, res, next) {
   ];
   res.render('artists', context);
 });
+
+
 
 //customers page
 app.get('/customers', function (req, res, next) {
@@ -451,8 +494,6 @@ app.get('/delete', function (req, res, next) {
   });
 });
 */
-
-
 
 
 app.use(function (req, res) {

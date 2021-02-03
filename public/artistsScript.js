@@ -23,7 +23,7 @@ function addButtonClick() {
     event.preventDefault();
   } else document.getElementById("addErrorNameArtistLastName").textContent = "";
   //artist firstName left out as it can be NULL
-  
+
 
   //check if all items are fileld out. If so, continue on sending the data to the database, else display error and don't do anything
   if (payloadArtistLastName != "") {
@@ -140,6 +140,19 @@ function SQLdeleteRow(idNumber) {
   event.preventDefault();
   return;
 }
+
+
+//AJAX delete request:
+function deleteID(id) {
+  console.log(id);
+  $.ajax({
+    url: '/deleteArtist/' + id,
+    type: 'DELETE',
+    success: function (result) {
+      window.location.reload(true);
+    }
+  })
+};
 
 
 
