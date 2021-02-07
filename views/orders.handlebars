@@ -69,6 +69,19 @@
     </fieldset>
   </form>
 
+    <!--Display our current data table for M:M relationship-->
+  <table>
+    <th>Order ID</th>
+    <th>Gallery ID</th>
+
+    {{#each dataListMToM}}
+    <tr id="newRow">
+      <td id="orderID">{{this.orderID}}</td>
+      <td id="galleryID">{{this.galleryID}}</td>
+    </tr>
+    {{/each}}
+  </table>
+
   <script src="ordersScript.js"></script>
 </body>
 

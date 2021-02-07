@@ -233,6 +233,20 @@ app.get('/orders', function (req, res, next) {
       "customerID": "23"
     }
   ];
+  context.dataListMToM = [
+    {
+      "orderID": "1",
+      "galleryID": "1"
+    },
+    {
+      "orderID": "2",
+      "galleryID": "1"
+    },
+    {
+      "orderID": "2",
+      "galleryID": "2"
+    },
+  ];
   res.render('orders', context);
 });
 
