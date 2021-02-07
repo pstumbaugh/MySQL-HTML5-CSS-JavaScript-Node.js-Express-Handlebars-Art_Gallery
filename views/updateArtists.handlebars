@@ -1,14 +1,20 @@
 <body class="body" id="artistsBody">
 
-<head>
-  <title>Online Art Gallery Database</title>
-  <meta charset="UTF=8">
-  <link rel="stylesheet" href="stylesheet.css" type="text/css">
-</head>
+  <head>
+    <title>Online Art Gallery Database</title>
+    <meta charset="UTF=8">
+    <link rel="stylesheet" href="stylesheet.css" type="text/css">
+  </head>
 
-
-
-  <button class="homeButton" type="button" onclick="location.href='/'">HOME</button>
+  <ul>
+    <li><button class="homeButton" type="button" onclick="location.href='/'">HOME</button></li>
+    <li><button class="homeButton" type="button" onclick="location.href='/artists'">Artists</button></li>
+    <li><button class="homeButton" type="button" onclick="location.href='/customers'">Customers</button></li>
+    <li><button class="homeButton" type="button" onclick="location.href='/galleries'">Galleries</button></li>
+    <li><button class="homeButton" type="button" onclick="location.href='/orders'">Orders</button></li>
+    <li><button class="homeButton" type="button" onclick="location.href='/paintings'">Paintings</button></li>
+    <li><button class="homeButton" type="button" onclick="location.href='/search'">Custom Search</button></li>
+  </ul>
 
   <h1>Artist Update (EXAMPLE):</h1>
 
@@ -18,22 +24,23 @@
     <th>First Name</th>
     <th>Last Name</th>
     {{#each dataList}}
-      <tr id="newRow">
-        <td id="originalID">{{this.artistID}}</td>
-        <td id="originalArtistFirstName">{{this.artistFirstName}}</td>
-        <td id="originalArtistLastName">{{this.artistLastName}}</td>
-      </tr>
+    <tr id="newRow">
+      <td id="originalID">{{this.artistID}}</td>
+      <td id="originalArtistFirstName">{{this.artistFirstName}}</td>
+      <td id="originalArtistLastName">{{this.artistLastName}}</td>
+    </tr>
     {{/each}}
   </table>
   {{#if dataList}}
   {{else}}
-    <h3 id="noDataTag"> No data in table to display</h3>
+  <h3 id="noDataTag"> No data in table to display</h3>
   {{/if}}
 
 
   <form>
     <fieldset>
-      <legend>Which item(s) would you like to update? When finished, hit the Done button. Anything left blank will retain it's value.</legend>
+      <legend>Which item(s) would you like to update? When finished, hit the Done button. Anything left blank will
+        retain it's value.</legend>
       <label for="FirstNameForm">First name: </label>
       <input type="text" name="FirstNameForm" id="FirstNameForm">
       <br>
@@ -50,4 +57,3 @@
 
   <script src="./updateArtists.js"></script>
 </body>
-
