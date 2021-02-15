@@ -13,6 +13,7 @@ function addButtonClick() {
 
   //get the values entered by user
   var payloadCustomerID = document.getElementById("customerIDForm").value;
+  var payloadOrderIDArray = document.getElementById("paintingsIDForm").value;
 
   //if one of the items in the table is not filled out, display error about that item
   //(after this, it will check all items are filled in. If not, it will error and not add to table)
@@ -20,6 +21,15 @@ function addButtonClick() {
     document.getElementById("addErrorNameCustomerID").textContent = "ERROR: Missing customer ID number";
     event.preventDefault();
   } else document.getElementById("addErrorNameCustomerID").textContent = "";
+  if (payloadOrderIDArray == undefined || payloadOrderIDArray == "") {
+    document.getElementById("addErrorPaintingsID").textContent = "ERROR: Missing at least 1 painting ID number";
+    event.preventDefault();
+  } else document.getElementById("addErrorPaintingsID").textContent = "";
+
+
+
+  //PARSE THE PAINTINGS ID'S FOR NUMBERS. THEN CREATE LOOP WHILE UPDATING THE PAINTINGS ID'S (AFTER CREATING A NEW ORDER REQUEST)
+
 
 
   //check if all items are fileld out. If so, continue on sending the data to the database, else display error and don't do anything
