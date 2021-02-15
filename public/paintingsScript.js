@@ -16,7 +16,6 @@ function addButtonClick() {
   var payloadArtType = document.getElementById("artTypeForm").value;
   var payloadPrice = document.getElementById("priceForm").value;
   var payloadGalleryID = document.getElementById("galleryIDForm").value;
-  var payloadOrderID = document.getElementById("orderIDForm").value;
 
   //if one of the items in the table is not filled out, display error about that item
   //(after this, it will check all items are filled in. If not, it will error and not add to table)
@@ -36,7 +35,7 @@ function addButtonClick() {
     document.getElementById("addErrorNameGalleryID").textContent = "ERROR: Missing gallery ID";
     event.preventDefault();
   } else document.getElementById("addErrorNameGalleryID").textContent = "";
-//orderID left out as it can remain NULL
+  //orderID left out as it can remain NULL
 
   //check if all items are fileld out. If so, continue on sending the data to the database, else display error and don't do anything
   if (payloadArtistID != "" || payloadArtType != "" || payloadPrice != "" || payloadGalleryID != "") {
