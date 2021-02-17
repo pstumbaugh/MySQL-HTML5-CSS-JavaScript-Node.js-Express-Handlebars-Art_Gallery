@@ -38,9 +38,7 @@
       <td><button type="button" onclick="deleteRow('currentTable',this)">Delete</button></td>
 -->
       <td><button type="button" onclick="deleteID({{artistID}})">Delete</button></td>
-      <td><button type="button" onclick="location.href='/updateArtists'">Update</button>
-        <!--EXAMPLE when hooked to backend:
-      <td><button type="button" onclick="location.href='/updateArtists?id='+{{this.artistID}}">Update</button> -->
+      <td><button type="button" onclick="location.href='/artistsTESTupdatePage?id='+{{this.artistID}}">Update</button>
       </td>
     </tr>
     {{/each}}
@@ -72,7 +70,7 @@
     </fieldset>
   </form>
 
-  <script src="artistsScript.js"></script>
+  <script src="artistsScriptTEST.js"></script>
 </body>
 
 </html>
