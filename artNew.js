@@ -48,7 +48,8 @@ app.get('/index', function (req, res, next) {
 });
 */
 
-//TESTING!! - AJAX DELETE FUNCTION
+
+//DELETE ARTIST
 app.delete('/deleteArtist/:id', function (req, res) {
     var sql = "DELETE FROM Artists WHERE artistID = ?";
     var inserts = [req.params.id];
@@ -64,8 +65,8 @@ app.delete('/deleteArtist/:id', function (req, res) {
     })
 });
 
-//update landing page (returns query for artists matching the given ID number and renders a new page)
-app.get('/artistsTESTupdatePage', function (req, res, next) {
+//UPDATE ARTISTS PAGE
+app.get('/artistsUpdatePage', function (req, res, next) {
     var context = {};
     mysql.pool.query("SELECT * FROM Artists WHERE artistID=?", [req.query.id], function (err, rows, fields) {
         if (err) { //if error, retur error message
@@ -83,10 +84,11 @@ app.get('/artistsTESTupdatePage', function (req, res, next) {
             })
         }
         context.dataList = rows;
-        res.render('updateArtistsTEST', context);
+        res.render('updateArtists', context);
     })
 });
 
+//UPDATING AN ARTIST
 //function to update a sql row based on the id provided
 //Will only update if a parameter is given. If it is left blank, the table will not update it and
 // will retain whatever information was already in that position
@@ -109,7 +111,7 @@ app.get('/safeUpdateArtists', function (req, res, next) {
                     }
                     else {
                         context.results = "Updated " + result.changedRows + " rows.";
-                        res.render('artistsTEST', context);
+                        res.render('artists', context);
                     }
                 });
         }
@@ -117,7 +119,8 @@ app.get('/safeUpdateArtists', function (req, res, next) {
 });
 
 
-app.post('/artistsTEST', function (req, res) {
+//INSERTING AN ARTIST
+app.post('/artists', function (req, res) {
     var sql = "INSERT INTO Artists (artistFirstName, artistLastName) VALUES (?, ?)";
     var inserts = [req.body.payloadArtistFirstName, req.body.payloadArtistLastName];
     sql = mysql.pool.query(sql, inserts, function (error, results, fields) {
@@ -126,15 +129,14 @@ app.post('/artistsTEST', function (req, res) {
             res.end();
         }
         else {
-            res.redirect('/artistsTEST');
+            res.redirect('/artists');
         }
     });
 });
 
 
-
-//TESTING! get artists from table page
-app.get('/artistsTEST', function (req, res) {
+//MAIN ARTISTS PAGE
+app.get('/artists', function (req, res) {
     var context = {};
     mysql.pool.query('SELECT * FROM Artists', function (err, rows, fields) {
         if (err) { //if error, retur error message
@@ -152,41 +154,11 @@ app.get('/artistsTEST', function (req, res) {
             })
         }
         context.dataList = rows;
-        res.render('artistsTEST', context);
+        res.render('artists', context);
     })
 });
 
-//artists page
-app.get('/artists', function (req, res, next) {
-    var context = {};
-    //test data:
-    context.dataList = [
-        {
-            "artistID": "5",
-            "artistFirstName": "Vincent",
-            "artistLastName": "van Gogh"
-        },
-        {
-            "artistID": "15",
-            "artistFirstName": "Claude",
-            "artistLastName": "Monet"
 
-        },
-        {
-            "artistID": "10",
-            "artistFirstName": "Frida",
-            "artistLastName": "Kahlo"
-
-        },
-        {
-            "artistID": "3",
-            "artistFirstName": "Leonardo",
-            "artistLastName": "da Vinci"
-
-        }
-    ];
-    res.render('artists', context);
-});
 
 
 

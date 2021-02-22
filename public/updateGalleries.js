@@ -1,3 +1,5 @@
+var port = globalVariable.number;
+
 //Button to update a gallery in our table --
 var updateButton = document.createElement("button");
 var updateButtonText = document.textContent = "Update";
@@ -16,9 +18,9 @@ function updateButtonClick() {
   var payloadGalleryName = document.getElementById("galleryNameForm").value;
 
   //send an insert request to our server via GET
-  req.open("GET", "http://flip3.engr.oregonstate.edu:8129/safe-update?galleryID=" + payloadGalleryID + "&galleryName=" + payloadGalleryName, true);
+  req.open("GET", "http://flip3.engr.oregonstate.edu:" + port + "/safe-update?galleryID=" + payloadGalleryID + "&galleryName=" + payloadGalleryName, true);
   //add event listener for async request (function)
-  req.addEventListener('load', function() {
+  req.addEventListener('load', function () {
     console.log("Updating gallery request status: " + req.status); //for testing
     if (req.status >= 200 && req.status < 400) { //if request send is good do this:
 
@@ -33,14 +35,14 @@ function updateButtonClick() {
 
   //send the request
   req.send(null);
-debugger;
+  debugger;
   //prevent page refresh
   event.preventDefault();
   return;
 }
 
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   updateButton.addEventListener("click", updateButtonClick);
 });
 

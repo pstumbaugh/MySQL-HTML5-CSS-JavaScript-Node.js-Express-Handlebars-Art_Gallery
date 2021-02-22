@@ -1,3 +1,6 @@
+var port = globalVariable.number;
+
+
 //Button to update a workout in our table --
 var updateButton = document.createElement("button");
 var updateButtonText = document.textContent = "Update";
@@ -20,9 +23,9 @@ function updateButtonClick() {
   var payloadUnit = document.getElementById("unit").value;
 
   //send an insert request to our server via GET
-  req.open("GET", "http://flip3.engr.oregonstate.edu:8129/safe-update?id=" + payloadID + "&name=" + payloadExerciseName + "&reps=" + payloadReps + "&weight=" + payloadWeight + "&date=" + payloadDate + "&unit=" + payloadUnit, true);
+  req.open("GET", "http://flip3.engr.oregonstate.edu:" + port + "/safe-update?id=" + payloadID + "&name=" + payloadExerciseName + "&reps=" + payloadReps + "&weight=" + payloadWeight + "&date=" + payloadDate + "&unit=" + payloadUnit, true);
   //add event listener for async request (function)
-  req.addEventListener('load', function() {
+  req.addEventListener('load', function () {
     console.log("Updating workout request status: " + req.status); //for testing
     if (req.status >= 200 && req.status < 400) { //if request send is good do this:
       //refresh the table with our data from input (this assuming the request was successfull)
@@ -69,16 +72,16 @@ function refreshTable() {
   var payloadID = row.lastElementChild.textContent;
 
   //send an insert request to our server via GET
-  req2.open("GET", "http://flip3.engr.oregonstate.edu:8129/getItemDetail?id=" + payloadID, true);
+  req2.open("GET", "http://flip3.engr.oregonstate.edu:" + port + "/getItemDetail?id=" + payloadID, true);
   //add event listener for async request (function)
-  req2.addEventListener('load', function() {
+  req2.addEventListener('load', function () {
     console.log("Retrieve current item's details status: " + req2.status); //for testing
     if (req2.status >= 200 && req2.status < 400) { //if request send is good do this:
 
       var object2 = JSON.parse(req2.responseText); //object containing our returned data
       console.log(object2); //for testing
 
-        //do stuff here if you want to use this function!
+      //do stuff here if you want to use this function!
 
       event.preventDefault();
     } else { //if error:
@@ -95,7 +98,7 @@ function refreshTable() {
 }
 
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   updateButton.addEventListener("click", updateButtonClick);
 });
 

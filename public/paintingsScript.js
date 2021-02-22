@@ -1,3 +1,4 @@
+var port = globalVariable.number;
 
 
 //GALLERY ADD BUTTON:
@@ -40,7 +41,7 @@ function addButtonClick() {
   //check if all items are fileld out. If so, continue on sending the data to the database, else display error and don't do anything
   if (payloadArtistID != "" || payloadArtType != "" || payloadPrice != "" || payloadGalleryID != "") {
     //send an insert request to our server via GET
-    req.open("GET", "http://flip1.engr.oregonstate.edu:8877insert?galleryID=" + payloadGalleryName, true);
+    req.open("GET", "http://flip1.engr.oregonstate.edu:" + port + "insert?galleryID=" + payloadGalleryName, true);
 
     //add event listener for async request (function)
     req.addEventListener('load', function () {

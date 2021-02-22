@@ -1,3 +1,6 @@
+var port = globalVariable.number;
+
+
 //Button to update a painting in our table --
 var updateButton = document.createElement("button");
 var updateButtonText = document.textContent = "Update";
@@ -20,9 +23,9 @@ function updateButtonClick() {
   var payloadOrderID = document.getElementById("orderIDForm").value;
 
   //send an insert request to our server via GET
-  req.open("GET", "http://flip3.engr.oregonstate.edu:8129/safe-update?paintingID=" + payloadPaintingID + "&artistID=" + payloadArtistID + "&artType=" + payloadArtType + "&price=" + payloadPrice + "&galleryID=" + payloadGalleryID + "&orderID=" + payloadOrderID, true);
+  req.open("GET", "http://flip3.engr.oregonstate.edu:" + port + "/safe-update?paintingID=" + payloadPaintingID + "&artistID=" + payloadArtistID + "&artType=" + payloadArtType + "&price=" + payloadPrice + "&galleryID=" + payloadGalleryID + "&orderID=" + payloadOrderID, true);
   //add event listener for async request (function)
-  req.addEventListener('load', function() {
+  req.addEventListener('load', function () {
     console.log("Updating Painting request status: " + req.status); //for testing
     if (req.status >= 200 && req.status < 400) { //if request send is good do this:
 
@@ -37,14 +40,14 @@ function updateButtonClick() {
 
   //send the request
   req.send(null);
-debugger;
+  debugger;
   //prevent page refresh
   event.preventDefault();
   return;
 }
 
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   updateButton.addEventListener("click", updateButtonClick);
 });
 

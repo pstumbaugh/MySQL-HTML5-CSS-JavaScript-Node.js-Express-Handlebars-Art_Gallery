@@ -1,4 +1,5 @@
 var express = require('express');
+const bodyParser = require('body-parser');
 var mysql = require('./dbcon.js');
 
 var app = express();
@@ -8,9 +9,11 @@ var handlebars = require('express-handlebars').create({
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('port', 8877);
+app.set('port', 8879);
 
 app.use(express.static('public'));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 //home page setup
 //Get and display (send back) all the items from the SQL table
@@ -45,10 +48,10 @@ app.get('/index', function (req, res, next) {
 });
 */
 
-//TESTING!! - AJAX DELETE FUNCTION
+
+//DELETE ARTIST
 app.delete('/deleteArtist/:id', function (req, res) {
-  //var mysql = req.app.get('mysql');
-  var sql = "DELETE FROM artistsTest WHERE artistID = ?";
+  var sql = "DELETE FROM Artists WHERE artistID = ?";
   var inserts = [req.params.id];
   sql = mysql.pool.query(sql, inserts, function (error, results, fields) {
     if (error) {
@@ -62,12 +65,10 @@ app.delete('/deleteArtist/:id', function (req, res) {
   })
 });
 
-
-
-//TESTING! get artists from table page
-app.get('/artistsTest', function (req, res) {
+//UPDATE ARTISTS PAGE
+app.get('/artistsUpdatePage', function (req, res, next) {
   var context = {};
-  mysql.pool.query('SELECT * FROM artistsTest', function (err, rows, fields) {
+  mysql.pool.query("SELECT * FROM Artists WHERE artistID=?", [req.query.id], function (err, rows, fields) {
     if (err) { //if error, retur error message
       next(err);
       return;
@@ -83,41 +84,81 @@ app.get('/artistsTest', function (req, res) {
       })
     }
     context.dataList = rows;
-    res.render('artistsTest', context);
+    res.render('updateArtists', context);
   })
 });
 
-//artists page
-app.get('/artists', function (req, res, next) {
+//UPDATING AN ARTIST
+//function to update a sql row based on the id provided
+//Will only update if a parameter is given. If it is left blank, the table will not update it and
+// will retain whatever information was already in that position
+app.get('/safeUpdateArtists', function (req, res, next) {
   var context = {};
-  //test data:
-  context.dataList = [
-    {
-      "artistID": "5",
-      "artistFirstName": "Vincent",
-      "artistLastName": "van Gogh"
-    },
-    {
-      "artistID": "15",
-      "artistFirstName": "Claude",
-      "artistLastName": "Monet"
 
-    },
-    {
-      "artistID": "10",
-      "artistFirstName": "Frida",
-      "artistLastName": "Kahlo"
-
-    },
-    {
-      "artistID": "3",
-      "artistFirstName": "Leonardo",
-      "artistLastName": "da Vinci"
-
+  mysql.pool.query("SELECT * FROM Artists WHERE artistID=?", [req.query.artistID], function (err, result) {
+    if (err) {
+      next(err);
+      return;
     }
-  ];
-  res.render('artists', context);
+    if (result.length == 1) {
+      var curVals = result[0];
+      mysql.pool.query("UPDATE Artists SET artistFirstName=?, artistLastName=? WHERE artistID=? ",
+        [req.query.artistFirstName || curVals.artistFirstName, req.query.artistLastName || curVals.artistLastName, req.query.artistID],
+        function (err, result) {
+          if (err) {
+            next(err);
+            return;
+          }
+          else {
+            context.results = "Updated " + result.changedRows + " rows.";
+            res.render('artists', context);
+          }
+        });
+    }
+  });
 });
+
+
+//INSERTING AN ARTIST
+app.post('/artists', function (req, res) {
+  var sql = "INSERT INTO Artists (artistFirstName, artistLastName) VALUES (?, ?)";
+  var inserts = [req.body.payloadArtistFirstName, req.body.payloadArtistLastName];
+  sql = mysql.pool.query(sql, inserts, function (error, results, fields) {
+    if (error) {
+      res.write(JSON.stringify(error));
+      res.end();
+    }
+    else {
+      res.redirect('/artists');
+    }
+  });
+});
+
+
+//MAIN ARTISTS PAGE
+app.get('/artists', function (req, res) {
+  var context = {};
+  mysql.pool.query('SELECT * FROM Artists', function (err, rows, fields) {
+    if (err) { //if error, retur error message
+      console.log("Error getting artists");
+      return;
+    }
+    //else iterate through table, using qParams to push items to rows. Then set
+    //dataList as rows and render page
+    var qParams = [];
+    for (var p in rows.query) {
+      qParams.push({
+        'artistID': rows.query[p],
+        'artistFirstName': rows.query[p],
+        'artistLastName': rows.query[p],
+      })
+    }
+    context.dataList = rows;
+    res.render('artists', context);
+  })
+});
+
+
 
 
 
