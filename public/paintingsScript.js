@@ -79,7 +79,7 @@ function addButtonClick() {
     //send the request
     req.send(JSON.stringify(payload));
 
-    //reload the window without refreshing page
+    //refreshing page
     location.reload();
 
   }

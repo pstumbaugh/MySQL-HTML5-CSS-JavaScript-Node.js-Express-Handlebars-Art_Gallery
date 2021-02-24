@@ -33,43 +33,52 @@ function addButtonClick() {
   //split the string into numbers by splitting it
   var payloadPaintingID = payloadPaintingIDinitial.split(",");
 
-  var i;
-  for (i = 0; i < payloadPaintingID.length; i++) {
+  console.log(payloadPaintingID);
 
-    console.log(payloadPaintingID[i]);
-
-    //stuff to send to the POST request
-    var payload = {};
-    payload.payloadCustomerID = payloadCustomerID;
-    payload.payloadPaintingID = payloadPaintingID[i];
+  //stuff to send to the POST request
+  var payload = {};
+  payload.payloadCustomerID = payloadCustomerID;
+  payload.payloadPaintingID = payloadPaintingID;
 
 
-    //check if all (required) items are fileld out. If so, continue on sending the data to the database, else display error and don't do anything
-    if (payloadCustomerID != "" && payloadPaintingID[i] != "") {
+  //check if all (required) items are fileld out. If so, continue on sending the data to the database, else display error and don't do anything
+  if (payloadCustomerID != "" && payloadPaintingID[0] != "") {
 
-      //send an insert request to our server via GET
-      req.open("POST", "http://flip1.engr.oregonstate.edu:" + port + "/orders", true);
+    //send an insert request to our server via GET
+    req.open("POST", "http://flip1.engr.oregonstate.edu:" + port + "/orders", true);
 
-      //for post request, set the header:
-      req.setRequestHeader('Content-Type', 'application/json');
+    //for post request, set the header:
+    req.setRequestHeader('Content-Type', 'application/json');
 
-      //add event listener for async request (function)
-      req.addEventListener('load', function () {
-        console.log("Adding order request status: " + req.status); //for testing
-        if (req.status >= 200 && req.status < 400) {
-          //if request send is good do this:
-          console.log("Success in adding order");
-        } else { //if error:
-          console.log("Error in network request: " + req.statusText);
-          event.preventDefault();
+    //add event listener for async request (function)
+    req.addEventListener('load', function () {
+      console.log("Adding order request status: " + req.status); //for testing
+      if (req.status >= 200 && req.status < 400) {
+        //if request send is good do this:
+        console.log("Success in adding order");
+      } else { //if error:
+        console.log("Error in network request: " + req.statusText);
+        if (req.status === 409) //bad customer request:
+        {
+          alert("Invalid Customer ID given, please try again.");
         }
-      });
+        else if (req.status === 400) //gallery ID not found
+        {
+          alert("Invalid Painting ID given, please try again.");
+        }
+        event.preventDefault();
+        window.location.reload(true);
+      }
+    });
 
-      //send the request
-      req.send(JSON.stringify(payload));
+    //send the request
+    req.send(JSON.stringify(payload));
 
-    }
+    //refreshing page
+    window.location.reload(true);
+
   }
+  window.location.reload(true);
   return;
 }
 

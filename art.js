@@ -686,7 +686,7 @@ app.post('/orders', function (req, res) {
     }
     else {
       //make sure painting exists first (if not, error and exit)
-      mysql.pool.query("SELECT * FROM Paintings WHERE paintingID=?", [req.body.payloadPaintingID], function (err, checkResults2) {
+      mysql.pool.query("SELECT * FROM Paintings WHERE paintingID=?", [req.body.payloadPaintingID[0]], function (err, checkResults2) {
         if (err) {
           next(err);
           return;
@@ -697,6 +697,8 @@ app.post('/orders', function (req, res) {
           res.sendStatus(400);
         }
         else {
+          //variable to indicate error has been found
+          var breaker = 0;
 
           //insert the order into the orders table
           var sql = "INSERT INTO Orders (customerID) VALUES (?)";
@@ -716,50 +718,79 @@ app.post('/orders', function (req, res) {
                 //grab the MAX orderID and store it in a variable:
                 var newOrderID = tempResults[0].maxID;
 
-                //Update the Paintings to reflect new order
-                var newSql = "UPDATE Paintings SET orderID=? WHERE paintingID=?";
-                var newInserts = [newOrderID, req.body.payloadPaintingID];
-                newSql = mysql.pool.query(newSql, newInserts, function (error, results, fields) {
-                  if (error) {
-                    res.write(JSON.stringify(error));
-                    res.end();
-                  }
+                //iterate through all the paintingID's sent for this order, 
+                // update that painting ID and add it to the OrdersToGalleries table
+                for (var i = 0; i < req.body.payloadPaintingID.length; i++) {
 
-                });
+                  //get current paintingID to update/add
+                  var currPaintingID = req.body.payloadPaintingID[i];
 
-                //udpate the OrdersToGalleries table to reflect new order
-
-                mysql.pool.query("SELECT galleryID FROM Paintings WHERE orderID = " + newOrderID, function (error, tempResults2, field) {
-                  if (error) {
-                    res.write(JSON.stringify(error));
-                    res.end();
-                  }
-
-                  //grab the galleryID to insert and store it in a variable:
-                  var galleryIDtoInsert = tempResults2[0].galleryID;
-
-                  //send an insert request to table
-                  var newSql2 = "INSERT INTO OrdersToGalleries (orderID, galleryID) VALUES (?, ?)";
-                  var inserts2 = [newOrderID, galleryIDtoInsert];
-                  newSql2 = mysql.pool.query(newSql2, inserts2, function (error, results, fields) {
+                  //Update the Paintings to reflect new order
+                  var newSql = "UPDATE Paintings SET orderID=? WHERE paintingID=?";
+                  var newInserts = [newOrderID, currPaintingID];
+                  newSql = mysql.pool.query(newSql, newInserts, function (error, results, fields) {
                     if (error) {
                       res.write(JSON.stringify(error));
                       res.end();
                     }
-                    else {
-                      res.redirect('/orders');
-                    }
                   });
-                })
+
+                  //udpate the OrdersToGalleries table to reflect new order
+                  mysql.pool.query("SELECT galleryID FROM Paintings WHERE paintingID = " + currPaintingID, function (error, tempResults2, field) {
+                    if (error) {
+                      res.write(JSON.stringify(error));
+                      res.end();
+                    }
+
+                    if (tempResults2.length != 0) {
+                      //grab the galleryID to insert and store it in a variable:
+                      var galleryIDtoInsert = tempResults2[0].galleryID;
+
+                      //send an insert request to table
+                      var newSql2 = "INSERT INTO OrdersToGalleries (orderID, galleryID) VALUES (?, ?)";
+                      var inserts2 = [newOrderID, galleryIDtoInsert];
+                      newSql2 = mysql.pool.query(newSql2, inserts2, function (error, results, fields) {
+                        if (error) {
+                          res.write(JSON.stringify(error));
+                          res.end();
+                        }
+                      });
+                    }
+                    else {
+                      res.status(400);
+                      res.sendStatus(400);
+                      res.end();
+                    }
+                  })
+
+                };
+                res.redirect('/orders');
               });
             };
           });
-        }
-      }
-      )
-    }
-  })
+        };
+      });
+    };
+  });
 });
+
+
+
+/*
+                  //make sure painting exists first (if not, stop, error and exit)
+                  mysql.pool.query("SELECT * FROM Paintings WHERE paintingID=?", [currPaintingID], function (err, checkResults3) {
+                    if (err) {
+                      next(err);
+                      return;
+                    }
+                    if (checkResults3.length == 0) //no artist found, return error
+                    {
+                      console.log("hi ho");
+                      res.status(400);
+                      res.sendStatus(400);
+                    }
+                    else {
+*/
 
 
 //MAIN Orders PAGE
@@ -855,3 +886,18 @@ app.listen(app.get('port'), function () {
   console.log('Express started on flip1.engr.oregonstate.edu:' + app.get('port') + ' OR localhost:' + app.get('port') + '; press Ctrl-C to terminate.');
 });
 
+
+//check if a painting is in the Paintings table
+//returns true if error found
+function checkforError(currPaintingID) {
+  mysql.pool.query("SELECT * FROM Paintings WHERE paintingID=?", [currPaintingID], function (err, checkResults3) {
+
+    if (checkResults3.length == 0) //no painting found, return error
+    {
+      return 1;
+    }
+    else {
+      return 0;
+    }
+  })
+};
