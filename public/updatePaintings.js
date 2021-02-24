@@ -15,32 +15,32 @@ function updateButtonClick() {
   var row = table.rows[1]; //then get the row (using row 0 since only 1 row will show)
 
   //get the payloads for each item
-  var payloadPaintingID = row.lastElementChild.textContent; //This is the SQL ID number
+  var payloadPaintingID = row.firstElementChild.textContent; //This is the SQL ID number
   var payloadArtistID = document.getElementById("artistIDForm").value;
   var payloadArtType = document.getElementById("artTypeForm").value;
   var payloadPrice = document.getElementById("priceForm").value;
   var payloadGalleryID = document.getElementById("galleryIDForm").value;
   var payloadOrderID = document.getElementById("orderIDForm").value;
 
+
   //send an insert request to our server via GET
-  req.open("GET", "http://flip3.engr.oregonstate.edu:" + port + "/safe-update?paintingID=" + payloadPaintingID + "&artistID=" + payloadArtistID + "&artType=" + payloadArtType + "&price=" + payloadPrice + "&galleryID=" + payloadGalleryID + "&orderID=" + payloadOrderID, true);
+  req.open("GET", "http://flip1.engr.oregonstate.edu:" + port + "/safeUpdatePaintings?paintingID=" + payloadPaintingID + "&artistID=" + payloadArtistID + "&artType=" + payloadArtType + "&price=" + payloadPrice + "&galleryID=" + payloadGalleryID + "&orderID=" + payloadOrderID, true);
   //add event listener for async request (function)
   req.addEventListener('load', function () {
-    console.log("Updating Painting request status: " + req.status); //for testing
+    console.log("Updating painting request status: " + req.status); //for testing
     if (req.status >= 200 && req.status < 400) { //if request send is good do this:
 
-      alert("Painting Successfully Updated");
-      event.preventDefault();
+      console.log("Painting Successfully Updated");
+      window.location.replace("http://flip1.engr.oregonstate.edu:" + port + "/paintings");
 
     } else { //if error:
-      alert("ERROR: Painting update failed");
+      alert("ERROR: painting update failed");
       console.log("Error in network request: " + req.statusText);
     }
   });
 
   //send the request
   req.send(null);
-  debugger;
   //prevent page refresh
   event.preventDefault();
   return;

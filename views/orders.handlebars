@@ -19,10 +19,12 @@
     <li><button class="homeButton" type="button" onclick="location.href='/search'">Custom Search</button></li>
   </ul>
 
-  <h1>Orders Results:</h1>
+
 
   <!--Display our current data table-->
-  <table id="currentTable">
+  <table class="row" id="currentTable" style="float: left;margin-right:30px">
+    <h1>Orders Results:</h1>
+
     <th>Order ID</th>
     <th>Customer ID</th>
     <th></th>
@@ -33,11 +35,25 @@
       <td id="orderID">{{this.orderID}}</td>
       <td id="customerID">{{this.customerID}}</td>
 
-      <td><button type="button" onclick="deleteRow('currentTable',this)">Delete</button></td>
-      <td><button type="button" onclick="location.href='/updateOrders'">Update</button>
-        <!--EXAMPLE when hooked to backend:
-      <td><button type="button" onclick="location.href='/updateArtists?id='+{{this.artistID}}">Update</button> -->
+      <td><button type="button" onclick="deleteID({{orderID}})">Delete</button></td>
+      <td><button type="button" onclick="location.href='/ordersUpdatePage?id='+{{this.orderID}}">Update</button>
       </td>
+    </tr>
+    {{/each}}
+  </table>
+
+
+  <!--Display our current data table for M:M relationship-->
+  <table class="row" style="float: left;margin-right:30px">
+    <h1>Orders To Galleries Results:</h1>
+
+    <th>Order ID</th>
+    <th>Gallery ID</th>
+
+    {{#each dataListMToM}}
+    <tr id="newRow">
+      <td id="orderID">{{this.orderID}}</td>
+      <td id="galleryID">{{this.galleryID}}</td>
     </tr>
     {{/each}}
   </table>
@@ -56,7 +72,7 @@
       <label for="customerIDLabel">*Customer ID: </label>
       <input type="text" name="customerIDForm" id="customerIDForm"></input>
       <br>
-      <label for="customerIDLabel">*Painting ID (if more than one, seperate with comma and space): </label>
+      <label for="customerIDLabel">*Painting ID: </label>
       <input type="text" name="paintingsIDForm" id="paintingsIDForm"></input>
       <br>
       <div id="orderAdderButton">
@@ -74,20 +90,10 @@
     </fieldset>
   </form>
 
+
+
   <br><br>
 
-  <!--Display our current data table for M:M relationship-->
-  <table>
-    <th>Order ID</th>
-    <th>Gallery ID</th>
-
-    {{#each dataListMToM}}
-    <tr id="newRow">
-      <td id="orderID">{{this.orderID}}</td>
-      <td id="galleryID">{{this.galleryID}}</td>
-    </tr>
-    {{/each}}
-  </table>
 
   <script src="portNumber.js"></script>
   <script src="ordersScript.js"></script>

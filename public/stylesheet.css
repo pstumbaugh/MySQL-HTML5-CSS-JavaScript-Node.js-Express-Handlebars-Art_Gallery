@@ -110,6 +110,7 @@ form input {
 
 h1 {
   font-family:Bradley Hand, Florence, serif;
+  margin-bottom: -20px;
   font-size: 30px;
   text-transform: capitalize;
   text-shadow: 0 0 3px white, 0 0 5px white, 0 0 5px white, 0 0 5px white, 0 0 5px white, 0 0 3px white, 0 0 5px white, 0 0 5px white, 0 0 5px white, 0 0 5px white;
@@ -210,4 +211,14 @@ ul {
 
 li {
   display: inline;
+}
+
+.row {
+  margin-left:5px;
+}
+  
+.column {
+  float: left;
+  width: 50%;
+  padding: 5px;
 }

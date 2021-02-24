@@ -22,7 +22,7 @@
   <h1>Customers Results:</h1>
 
   <!--Display our current data table-->
-  <table id="currentTable">
+  <table class="row" style="float: left;margin-right:30px" id="currentTable">
     <th>Customer ID</th>
     <th>First Name</th>
     <th>Last Name</th>
@@ -35,10 +35,8 @@
       <td id="customerFirstName">{{this.customerFirstName}}</td>
       <td id="customerLastName">{{this.customerLastName}}</td>
 
-      <td><button type="button" onclick="deleteRow('currentTable',this)">Delete</button></td>
-      <td><button type="button" onclick="location.href='/updateCustomers'">Update</button>
-        <!--EXAMPLE when hooked to backend:
-      <td><button type="button" onclick="location.href='/updateArtists?id='+{{this.artistID}}">Update</button> -->
+      <td><button type="button" onclick="deleteID({{customerID}})">Delete</button></td>
+      <td><button type="button" onclick="location.href='/customersUpdatePage?id='+{{this.customerID}}">Update</button>
       </td>
     </tr>
     {{/each}}

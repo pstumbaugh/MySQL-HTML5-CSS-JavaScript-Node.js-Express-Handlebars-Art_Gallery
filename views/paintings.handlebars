@@ -22,7 +22,7 @@
   <h1>Paintings Results:</h1>
 
   <!--Display our current data table-->
-  <table id="currentTable">
+  <table class="row" style="float: left;margin-right:30px" id="currentTable">
     <th>Painting ID</th>
     <th>Artist ID</th>
     <th>Art Type</th>
@@ -41,10 +41,8 @@
       <td id="galleryID">{{this.galleryID}}</td>
       <td id="orderID">{{this.orderID}}</td>
 
-      <td><button type="button" onclick="deleteRow('currentTable',this)">Delete</button></td>
-      <td><button type="button" onclick="location.href='/updatePaintings'">Update</button>
-        <!--EXAMPLE when hooked to backend:
-      <td><button type="button" onclick="location.href='/updateArtists?id='+{{this.artistID}}">Update</button> -->
+      <td><button type="button" onclick="deleteID({{paintingID}})">Delete</button></td>
+      <td><button type="button" onclick="location.href='/paintingsUpdatePage?id='+{{this.paintingID}}">Update</button>
       </td>
     </tr>
     {{/each}}

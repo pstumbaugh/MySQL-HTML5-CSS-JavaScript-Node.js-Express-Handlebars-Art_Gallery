@@ -14,7 +14,7 @@ function addButtonClick() {
 
   //get the values entered by user
   var payloadCustomerID = document.getElementById("customerIDForm").value;
-  var payloadPaintingID = document.getElementById("paintingsIDForm").value;
+  var payloadPaintingIDinitial = document.getElementById("paintingsIDForm").value;
 
 
   //if one of the items in the table is not filled out, display error about that item
@@ -23,55 +23,55 @@ function addButtonClick() {
     document.getElementById("addErrorNameCustomerID").textContent = "ERROR: Missing customer ID";
     event.preventDefault();
   } else document.getElementById("addErrorNameCustomerID").textContent = "";
-  if (payloadPaintingID == undefined || payloadPaintingID == "") {
+  if (payloadPaintingIDinitial == undefined || payloadPaintingIDinitial == "") {
     document.getElementById("addErrorPaintingsID").textContent = "ERROR: Missing paintingID";
     event.preventDefault();
   } else document.getElementById("addErrorPaintingsID").textContent = "";
 
+  //remove any whitespace characters
+  payloadPaintingIDinitial.replace(/ /g, "");
+  //split the string into numbers by splitting it
+  var payloadPaintingID = payloadPaintingIDinitial.split(",");
 
-  //stuff to send to the POST request
-  var payload = {};
-  payload.payloadCustomerID = payloadCustomerID;
-  payload.payloadPaintingID = payloadPaintingID;
+  var i;
+  for (i = 0; i < payloadPaintingID.length; i++) {
+
+    console.log(payloadPaintingID[i]);
+
+    //stuff to send to the POST request
+    var payload = {};
+    payload.payloadCustomerID = payloadCustomerID;
+    payload.payloadPaintingID = payloadPaintingID[i];
 
 
-  //check if all (required) items are fileld out. If so, continue on sending the data to the database, else display error and don't do anything
-  if (payloadCustomerID != "" && payloadPaintingID != "") {
+    //check if all (required) items are fileld out. If so, continue on sending the data to the database, else display error and don't do anything
+    if (payloadCustomerID != "" && payloadPaintingID[i] != "") {
 
-    //send an insert request to our server via GET
-    req.open("POST", "http://flip1.engr.oregonstate.edu:" + port + "/orders", true);
+      //send an insert request to our server via GET
+      req.open("POST", "http://flip1.engr.oregonstate.edu:" + port + "/orders", true);
 
-    //for post request, set the header:
-    req.setRequestHeader('Content-Type', 'application/json');
+      //for post request, set the header:
+      req.setRequestHeader('Content-Type', 'application/json');
 
-    //add event listener for async request (function)
-    req.addEventListener('load', function () {
-      console.log("Adding order request status: " + req.status); //for testing
-      if (req.status >= 200 && req.status < 400) {
-        //if request send is good do this:
-        console.log("Success in adding order");
-      } else { //if error:
-        console.log("Error in network request: " + req.statusText);
-        if (req.status === 409) //bad customer request:
-        {
-          alert("Invalid Customer ID given, please try again.");
+      //add event listener for async request (function)
+      req.addEventListener('load', function () {
+        console.log("Adding order request status: " + req.status); //for testing
+        if (req.status >= 200 && req.status < 400) {
+          //if request send is good do this:
+          console.log("Success in adding order");
+        } else { //if error:
+          console.log("Error in network request: " + req.statusText);
+          event.preventDefault();
         }
-        else if (req.status === 400) //gallery ID not found
-        {
-          alert("Invalid Painting ID given, please try again.");
-        }
-        event.preventDefault();
-        return;
-      }
-    });
+      });
 
-    //send the request
-    req.send(JSON.stringify(payload));
+      //send the request
+      req.send(JSON.stringify(payload));
 
+    }
   }
   return;
 }
-
 
 
 

@@ -17,7 +17,7 @@
     <li><button class="homeButton" type="button" onclick="location.href='/search'">Custom Search</button></li>
   </ul>
 
-  <h1>Customer Update (EXAMPLE):</h1>
+  <h1>Customer Update:</h1>
 
   <!--Display the item being updated -->
   <table id="currentTable">
@@ -27,8 +27,8 @@
     {{#each dataList}}
     <tr id="newRow">
       <td id="originalID">{{this.customerID}}</td>
-      <td id="originalArtistFirstName">{{this.customerFirstName}}</td>
-      <td id="originalArtistLastName">{{this.customerLastName}}</td>
+      <td id="originalCustomerFirstName">{{this.customerFirstName}}</td>
+      <td id="originalCustomerLastName">{{this.customerLastName}}</td>
     </tr>
     {{/each}}
   </table>
@@ -49,7 +49,7 @@
       <input type="text" name="lastNameForm" id="lastNameForm">
       <br>
       <!-- update button sends update request to server, then redirects back to the original page -->
-      <div type="button" id="updateButton" onclick="location.href='/customers'">
+      <div type="button" id="updateButton">
       </div>
     </fieldset>
   </form>
