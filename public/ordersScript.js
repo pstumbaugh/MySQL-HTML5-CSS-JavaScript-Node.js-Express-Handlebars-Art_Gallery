@@ -14,7 +14,7 @@ function addButtonClick() {
 
   //get the values entered by user
   var payloadCustomerID = document.getElementById("customerIDForm").value;
-  var payloadPaintingID = document.getElementById("paintingsIDForm").value;
+  var payloadPaintingIDinitial = document.getElementById("paintingsIDForm").value;
 
 
   //if one of the items in the table is not filled out, display error about that item
@@ -23,11 +23,15 @@ function addButtonClick() {
     document.getElementById("addErrorNameCustomerID").textContent = "ERROR: Missing customer ID";
     event.preventDefault();
   } else document.getElementById("addErrorNameCustomerID").textContent = "";
-  if (payloadPaintingID == undefined || payloadPaintingID == "") {
+  if (payloadPaintingIDinitial == undefined || payloadPaintingIDinitial == "") {
     document.getElementById("addErrorPaintingsID").textContent = "ERROR: Missing paintingID";
     event.preventDefault();
   } else document.getElementById("addErrorPaintingsID").textContent = "";
 
+  //remove any whitespace characters
+  payloadPaintingIDinitial.replace(/ /g, "");
+  //split the string into numbers by splitting it
+  var payloadPaintingID = payloadPaintingIDinitial.split(",");
 
   //stuff to send to the POST request
   var payload = {};
@@ -36,8 +40,10 @@ function addButtonClick() {
 
 
   //check if all (required) items are fileld out. If so, continue on sending the data to the database, else display error and don't do anything
-  if (payloadCustomerID != "" && payloadPaintingID != "") {
+  if (payloadCustomerID != "" && payloadPaintingID[0] != "") {
 
+
+    //SEND INITIAL ORDER (CREATES A NEW ORDER AND ADDS FIRST PAINTING)
     //send an insert request to our server via GET
     req.open("POST", "http://flip1.engr.oregonstate.edu:" + port + "/orders", true);
 
@@ -55,23 +61,71 @@ function addButtonClick() {
         if (req.status === 409) //bad customer request:
         {
           alert("Invalid Customer ID given, please try again.");
+          return;
         }
         else if (req.status === 400) //gallery ID not found
         {
           alert("Invalid Painting ID given, please try again.");
+          return;
         }
         event.preventDefault();
-        return;
       }
     });
 
+    event.preventDefault();
     //send the request
     req.send(JSON.stringify(payload));
+    event.preventDefault();
 
+
+    //add in any extra paintings to new order number
+    for (var i = 1; i < payloadPaintingID.length; i++) {
+
+      var req2 = new XMLHttpRequest();
+      payload.currentPayloadPaintingID = payloadPaintingID[i];
+
+      //send an insert request to our server via GET
+      req2.open("POST", "http://flip1.engr.oregonstate.edu:" + port + "/moreOrders", true);
+
+      //for post request, set the header:
+      req2.setRequestHeader('Content-Type', 'application/json');
+
+      //add event listener for async request (function)
+      req2.addEventListener('load', function () {
+        console.log("Adding order request status: " + req2.status); //for testing
+        if (req2.status >= 200 && req2.status < 400) {
+          //if request send is good do this:
+          console.log("Success in adding order");
+        } else { //if error:
+          console.log("Error in network request: " + req2.statusText);
+          if (req2.status === 409) //bad customer request:
+          {
+            alert("Invalid Customer ID given, please try again.");
+            event.preventDefault();
+            window.location.replace('./orders');
+            return;
+          }
+          else if (req2.status === 400) //gallery ID not found
+          {
+            alert("Invalid Painting ID given, please try again.\n NOTE: Paintings before this ID were added successfully");
+            event.preventDefault();
+            window.location.replace('./orders');
+            return;
+          }
+          event.preventDefault();
+        }
+        event.preventDefault();
+      });
+
+      //send the request
+      req2.send(JSON.stringify(payload));
+    }
   }
+  alert("Painting(s) added successfully to order");
+  event.preventDefault();
+  window.location.replace('./orders');
   return;
 }
-
 
 
 
