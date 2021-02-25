@@ -918,6 +918,7 @@ app.post('/search', function (req, res) {
     if (results){
       context.dataList = results
       console.log(context.dataList)
+      res.render('search', context);
     }
   });
 });
