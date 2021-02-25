@@ -886,17 +886,9 @@ app.get('/orders', function (req, res) {
 
 
 
-
-
-
-
-
-
-
-
-
 //search page
 app.get('/search', function (req, res, next) {
+  console.log(context)
   var context = {};
   //test data:
   context.dataList = [
@@ -914,6 +906,20 @@ app.get('/search', function (req, res, next) {
     }
   ];
   res.render('search', context);
+});
+
+app.post('/search', function (req, res) {
+  var context = {};
+  mysql.pool.query('SELECT * FROM '.concat(req.body.payloadSearchDatabase,' WHERE ',req.body.payloadSearchType,' = ',req.body.payloadSearch), function (err, results, fields) {
+    if (err) { //if error, return error message
+      console.log("Error getting search");
+      return;
+    }
+    if (results){
+      context.dataList = results
+      console.log(context.dataList)
+    }
+  });
 });
 
 
