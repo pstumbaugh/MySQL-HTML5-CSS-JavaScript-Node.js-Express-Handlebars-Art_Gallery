@@ -22,21 +22,19 @@
   <!-- Customer Search form -->
   <h1>Custom Search:</h1>
   <br><br>
-  <form>
+  <form id="search" method="POST" action = "/search">
     <fieldset>
       <legend>Search</legend>
       <!-- List of checkbox and search types -->
       <ul style="list-style-type:none;">
-        <li><input type="checkbox" id="customerSearch"> Customer Last Name</input>
-        <li><input type="checkbox" id="paintingSearch"> Painting Name</input>
-        <li><input type="checkbox" id="orderSearch"> Order ID</input>
+        <li><input name = "check" type="checkbox" id="customerSearch" value="Customers"> Customer Last Name</input>
+        <li><input name = "check" type="checkbox" id="paintingSearch" value="Paintings"> Painting Name</input>
+        <li><input name = "check" type="checkbox" id="orderSearch" value="Orders"> Order ID</input>
       </ul>
       <input type="text" name="searchForm" id="searchForm"></input>
       <br>
-      <div id="searchButton">
+      <input type="submit" value="submit">
       </div>
-         <!-- display any missing NOT NULL items -->
-    <div><b id="addErrorSearch"></b></div>
     </fieldset>
   </form>
 
@@ -52,6 +50,14 @@
       </tr>
     </thead>
     <tbody>
+      {{#each error}}
+      <tr>
+        {{#each this}}
+        <td>{{this}}</td>
+        <!--gets data sent in that attribute-->
+        {{/each}}
+      </tr>
+      {{/each}}
       {{#each dataList}}
       <tr>
         {{#each this}}

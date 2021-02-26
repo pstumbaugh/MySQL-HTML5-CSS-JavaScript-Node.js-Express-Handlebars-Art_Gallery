@@ -888,40 +888,44 @@ app.get('/orders', function (req, res) {
 
 //search page
 app.get('/search', function (req, res, next) {
-  console.log(context)
   var context = {};
   //test data:
   context.dataList = [
-    {
-      "orderID": "1",
-      "customerID": "14"
-    },
-    {
-      "orderID": "2",
-      "customerID": "5"
-    },
-    {
-      "orderID": "3",
-      "customerID": "23"
-    }
   ];
   res.render('search', context);
 });
 
-app.post('/search', function (req, res) {
-  var context = {};
-  mysql.pool.query('SELECT * FROM '.concat(req.body.payloadSearchDatabase,' WHERE ',req.body.payloadSearchType,' = ',req.body.payloadSearch), function (err, results, fields) {
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
+app.post('/search', urlencodedParser, function (req, res) {
+  var context = {}
+  var Search = req.body.searchForm
+  var SearchDatabase = req.body.check
+  var SearchType = ""
+  if (SearchDatabase == "Customers"){
+    Search = '\''+Search+'\''
+    SearchType = "customerLastName"
+  }
+  else if (SearchDatabase == "Paintings"){
+    SearchType = "paintingID"
+  }
+  else if (SearchDatabase == "Orders"){
+    SearchType = "orderID"
+  }
+
+  mysql.pool.query('SELECT * FROM '.concat(SearchDatabase,' WHERE ',SearchType,' = ',Search), function (err, results, fields) {
     if (err) { //if error, return error message
       console.log("Error getting search");
-      return;
-    }
-    if (results){
-      context.dataList = results
-      console.log(context.dataList)
+      context.error = [{error: "Missing checkbox or text input"}]
       res.render('search', context);
     }
-  });
-});
+    else if (results){
+      console.log(results)
+      context.dataList = results
+      res.render('search', context);
+    }
+  })
+})
 
 
 
