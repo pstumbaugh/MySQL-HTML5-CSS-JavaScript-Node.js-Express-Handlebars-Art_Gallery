@@ -69,11 +69,68 @@
     <fieldset>
       <legend>Add an Order</legend>
       <label>(Order ID will auto-populate) </label><br>
-      <label for="customerIDLabel">*Customer ID: </label>
-      <input type="text" name="customerIDForm" id="customerIDForm"></input>
+
+      <p>
+        <label for='customersToChoose'>Customers:</label><br>
+        <select id='customersToChoose'>
+          <option>Choose customer:</option>
+          {{#each customers}}
+          <option id="customerIDForm" value="{{this.customerID}}">{{this.customerFirstName}} {{this.customerLastName}}
+          </option>
+          {{/each}}
+        </select>
+      </p>
+
+
+      <span>
+        <label for='paintingsToChoose1'>Paintings Available (choose up to 4):</label><br>
+        <select id='paintingsToChoose1'>
+          <option>Choose painting:</option>
+          {{#each paintings}}
+          <option value="{{this.paintingID}}">{{this.paintingID}}
+          </option>
+          {{/each}}
+        </select>
+      </span>
       <br>
-      <label for="customerIDLabel">*Painting ID: (add up to 4 painting ID's, seperated by commas)</label>
+      <span>
+        <select id='paintingsToChoose2'>
+          <option>Choose painting:</option>
+          {{#each paintings}}
+          <option value="{{this.paintingID}}">{{this.paintingID}}
+          </option>
+          {{/each}}
+        </select>
+      </span>
+      <br>
+      <span>
+        <select id='paintingsToChoose3'>
+          <option>Choose painting:</option>
+          {{#each paintings}}
+          <option value="{{this.paintingID}}">{{this.paintingID}}
+          </option>
+          {{/each}}
+        </select>
+      </span>
+      <br>
+      <span>
+        <select id='paintingsToChoose4'>
+          <option>Choose painting:</option>
+          {{#each paintings}}
+          <option value="{{this.paintingID}}">{{this.paintingID}}
+          </option>
+          {{/each}}
+        </select>
+      </span>
+      <br>
+
+
+      <!-- OLD VERSION
+      <label for="customerIDLabel">*Painting ID: (add up to 4 painting ID's, seperated by commas. Please ensure ID's are
+        correct)</label>
       <input type="text" name="paintingsIDForm" id="paintingsIDForm"></input>
+      -->
+
       <br>
       <div id="orderAdderButton">
       </div>
@@ -89,6 +146,8 @@
       <span id="addSuccess"></span>
     </fieldset>
   </form>
+
+
 
 
 

@@ -11,11 +11,20 @@ document.getElementById("orderAdderButton").appendChild(addButton);
 //When client clicks the add a gallery submit button:
 function addButtonClick() {
   var req = new XMLHttpRequest(); //create new request
-
   //get the values entered by user
-  var payloadCustomerID = document.getElementById("customerIDForm").value;
-  var payloadPaintingIDinitial = document.getElementById("paintingsIDForm").value;
+  var payloadCustomerID = document.getElementById("customersToChoose").value;
+  var payloadPaintingID = [];
+  payloadPaintingID[0] = document.getElementById("paintingsToChoose1").value;
+  payloadPaintingID[1] = document.getElementById("paintingsToChoose2").value;
+  payloadPaintingID[2] = document.getElementById("paintingsToChoose3").value;
+  payloadPaintingID[3] = document.getElementById("paintingsToChoose4").value;
 
+
+  //check if nothing was selected, if so, use 0
+  for (var a = 0; a < payloadPaintingID.length; a++) {
+    if (payloadPaintingID[a] == "Choose painting:")
+      payloadPaintingID[a] = 0;
+  }
 
   //if one of the items in the table is not filled out, display error about that item
   //(after this, it will check all items are filled in. If not, it will error and not add to table)
@@ -23,20 +32,22 @@ function addButtonClick() {
     document.getElementById("addErrorNameCustomerID").textContent = "ERROR: Missing customer ID";
     event.preventDefault();
   } else document.getElementById("addErrorNameCustomerID").textContent = "";
-  if (payloadPaintingIDinitial == undefined || payloadPaintingIDinitial == "") {
+  if (payloadPaintingID[0] == undefined || payloadPaintingID[0] == "") {
     document.getElementById("addErrorPaintingsID").textContent = "ERROR: Missing paintingID";
     event.preventDefault();
   } else document.getElementById("addErrorPaintingsID").textContent = "";
 
+  /*
   //remove any whitespace characters
   payloadPaintingIDinitial.replace(/ /g, "");
   //split the string into numbers by splitting it
   var payloadPaintingID = payloadPaintingIDinitial.split(",");
-
+*/
   //stuff to send to the POST request
   var payload = {};
   payload.payloadCustomerID = payloadCustomerID;
   payload.payloadPaintingID = payloadPaintingID;
+
 
 
   //check if all (required) items are fileld out. If so, continue on sending the data to the database, else display error and don't do anything
@@ -79,7 +90,7 @@ function addButtonClick() {
 
 
     //add in any extra paintings to new order number
-    for (var i = 1; i < payloadPaintingID.length; i++) {
+    for (var i = 1; i < payloadPaintingID.length && payloadPaintingID[i] != 0; i++) {
 
       var req2 = new XMLHttpRequest();
       payload.currentPayloadPaintingID = payloadPaintingID[i];

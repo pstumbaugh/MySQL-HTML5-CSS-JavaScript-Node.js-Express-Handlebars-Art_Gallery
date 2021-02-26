@@ -2,7 +2,7 @@ var express = require('express');
 const bodyParser = require('body-parser');
 var mysql = require('./dbcon.js');
 
-//port to use (8875 - Pat Testing // 8879 - Zhen Testing // 8877 - Live website)
+//port to use (8875 - Testing // 8877 - Live website)
 var port = 8875;
 
 var app = express();
@@ -845,51 +845,55 @@ app.post('/moreOrders', function (req, res) {
 //Gets all orders from the data base, returns it as dataList
 app.get('/orders', function (req, res) {
   var context = {};
+  //get the current orders table
   mysql.pool.query('SELECT * FROM Orders ORDER BY orderID', function (err, rows, fields) {
     if (err) { //if error, retur error message
       console.log("Error getting orders");
       return;
     }
-    //else iterate through table, using qParams to push items to rows. Then set
-    //dataList as rows.
-    var qParams = [];
-    for (var p in rows.query) {
-      qParams.push({
-        'orderID': rows.query[p],
-        'customerID': rows.query[p],
-      })
-    }
     context.dataList = rows;
 
 
-    mysql.pool.query('SELECT * FROM OrdersToGalleries ORDER BY orderID', function (err, moreRows, fields) {
+    //get the ordersToGalleries table
+    mysql.pool.query('SELECT * FROM OrdersToGalleries ORDER BY orderID', function (err, resultsMM, fields) {
       if (err) { //if error, retur error message
-        console.log("Error getting orders");
+        console.log("Error getting OrdersToGalleries");
         return;
       }
-      //else iterate through table, using qParams to push items to rows. Then set
-      //dataList as rows and render page
+      context.dataListMToM = resultsMM;
 
-      var qParams = [];
-      for (var p in moreRows.query) {
-        qParams.push({
-          'orderID': moreRows.query[p],
-          'galleryID': moreRows.query[p],
-        })
-      }
-      context.dataListMToM = moreRows;
+      //get the customerID's
+      mysql.pool.query('SELECT customerID, customerFirstName, customerLastName FROM Customers', function (err, resultsCustomers, fields) {
+        if (err) { //if error, retur error message
+          console.log("Error getting paintings");
+          return;
+        }
+        context.customers = resultsCustomers;
+      });
 
-      res.render('orders', context);
+      //get the paintingID's
+      mysql.pool.query('SELECT paintingID FROM Paintings WHERE orderID IS NULL', function (err, resultsPaintingsForSale, fields) {
+        if (err) { //if error, retur error message
+          console.log("Error getting paintings");
+          return;
+        }
+        context.paintings = resultsPaintingsForSale;
+
+        //finally, render the orders page
+        res.render('orders', context);
+      });
     });
   });
 });
 
 
 
+
+//-------------------SEARCH SECTION--------------------------------------------------------------//
+
 //search page
 app.get('/search', function (req, res, next) {
   var context = {};
-  //test data:
   context.dataList = [
   ];
   res.render('search', context);
@@ -902,30 +906,33 @@ app.post('/search', urlencodedParser, function (req, res) {
   var Search = req.body.searchForm
   var SearchDatabase = req.body.check
   var SearchType = ""
-  if (SearchDatabase == "Customers"){
-    Search = '\''+Search+'\''
+  if (SearchDatabase == "Customers") {
+    Search = '\'' + Search + '\''
     SearchType = "customerLastName"
   }
-  else if (SearchDatabase == "Paintings"){
+  else if (SearchDatabase == "Paintings") {
     SearchType = "paintingID"
   }
-  else if (SearchDatabase == "Orders"){
+  else if (SearchDatabase == "Orders") {
     SearchType = "orderID"
   }
 
-  mysql.pool.query('SELECT * FROM '.concat(SearchDatabase,' WHERE ',SearchType,' = ',Search), function (err, results, fields) {
+  mysql.pool.query('SELECT * FROM '.concat(SearchDatabase, ' WHERE ', SearchType, ' = ', Search), function (err, results, fields) {
     if (err) { //if error, return error message
       console.log("Error getting search");
-      context.error = [{error: "Missing checkbox or text input"}]
+      context.error = [{ error: "Missing checkbox or text input" }]
       res.render('search', context);
     }
-    else if (results){
+    else if (results) {
       console.log(results)
       context.dataList = results
       res.render('search', context);
     }
   })
 })
+
+
+
 
 
 
