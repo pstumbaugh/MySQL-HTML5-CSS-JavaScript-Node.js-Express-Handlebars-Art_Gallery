@@ -45,23 +45,52 @@
 
   <form>
     <fieldset>
-      <legend>Which item(s) would you like to update? When finished, hit the Done button. Anything left blank will
+      <legend>Which item(s) would you like to update? <br> Anything left blank will
         retain it's value.</legend>
-      <label for="artistIDForm">Artist ID: </label>
-      <input type="text" name="artistIDForm" id="artistIDForm">
+
+      <label>Artist:</label>
+      <select id='artistIDForm'>
+        <option></option>
+        {{#each artists}}
+        <option id="artistIDForm" value="{{this.artistID}}">{{this.artistFirstName}} {{this.artistLastName}}
+        </option>
+        {{/each}}
+      </select>
+
       <br>
       <label for="artTypeForm">Art Type: </label>
       <input type="text" name="artTypeForm" id="artTypeForm">
       <br>
+
       <label for="priceForm">Price: </label>
       <input type="text" name="priceForm" id="priceForm">
       <br>
-      <label for="galleryIDForm">Gallery ID: </label>
-      <input type="text" name="galleryIDForm" id="galleryIDForm">
+
+      <label>Gallery: </label>
+      <select id='galleryIDForm'>
+        <option></option>
+        {{#each gallery}}
+        <option id="galleryIDForm" value="{{this.galleryID}}">{{this.galleryName}}
+        </option>
+        {{/each}}
+      </select>
       <br>
-      <label for="orderIDForm">Order ID: </label>
-      <input type="text" name="orderIDForm" id="orderIDForm">
+
+      <label>Order Number: </label>
+      <select id='orderIDForm'>
+        <option></option>
+        {{#each orders}}
+        <option id="orderIDForm" value="{{this.orderID}}">{{this.orderID}}
+        </option>
+        {{/each}}
+      </select>
+
       <br>
+
+      <span style="font-size:11px">*Note: If a painting is not already part of an order, selecting an order number will
+        add that painting to that order.</span>
+      <br><br>
+
       <!-- update button sends update request to server, then redirects back to the original page -->
       <div type="button" id="updateButton">
       </div>

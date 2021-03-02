@@ -100,6 +100,10 @@ form input {
   width: 60%;
 }
 
+select {
+  width:150px;
+}
+
 #requirement {
   font-size: 15px;
   text-align: right;
@@ -107,9 +111,8 @@ form input {
 /* end of FORM style */
 
 
-
 h1 {
-  font-family:Bradley Hand, Florence, serif;
+  font-family: Garamond, serif;
   margin-bottom: -20px;
   font-size: 30px;
   text-transform: capitalize;
@@ -155,7 +158,7 @@ h1 {
 }
 
 #homePageHeader {
-  font-family:Bradley Hand, Florence, serif;
+  font-family:Bradley Hand, Garamond, Florence, serif;
   font-size: 50px;
   text-transform: capitalize;
 }
@@ -221,4 +224,8 @@ li {
   float: left;
   width: 50%;
   padding: 5px;
+}
+
+div > b{
+  color: red;
 }

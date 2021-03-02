@@ -22,6 +22,7 @@ function updateButtonClick() {
   var payloadGalleryID = document.getElementById("galleryIDForm").value;
   var payloadOrderID = document.getElementById("orderIDForm").value;
 
+  debugger;
 
   //send an insert request to our server via GET
   req.open("GET", "http://flip1.engr.oregonstate.edu:" + port + "/safeUpdatePaintings?paintingID=" + payloadPaintingID + "&artistID=" + payloadArtistID + "&artType=" + payloadArtType + "&price=" + payloadPrice + "&galleryID=" + payloadGalleryID + "&orderID=" + payloadOrderID, true);

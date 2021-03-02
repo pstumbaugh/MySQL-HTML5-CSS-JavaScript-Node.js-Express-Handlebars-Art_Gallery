@@ -68,16 +68,7 @@ app.get('/artistsUpdatePage', function (req, res, next) {
       next(err);
       return;
     }
-    //else iterate through table, using qParams to push items to rows. Then set
-    //dataList as rows and render page
-    var qParams = [];
-    for (var p in rows.query) {
-      qParams.push({
-        'artistID': rows.query[p],
-        'artistFirstName': rows.query[p],
-        'artistLastName': rows.query[p],
-      })
-    }
+
     context.dataList = rows;
     res.render('updateArtists', context);
   })
@@ -142,16 +133,7 @@ app.get('/artists', function (req, res) {
       console.log("Error getting artists");
       return;
     }
-    //else iterate through table, using qParams to push items to rows. Then set
-    //dataList as rows and render page
-    var qParams = [];
-    for (var p in rows.query) {
-      qParams.push({
-        'artistID': rows.query[p],
-        'artistFirstName': rows.query[p],
-        'artistLastName': rows.query[p],
-      })
-    }
+
     context.dataList = rows;
     res.render('artists', context);
   })
@@ -190,16 +172,7 @@ app.get('/customersUpdatePage', function (req, res, next) {
       next(err);
       return;
     }
-    //else iterate through table, using qParams to push items to rows. Then set
-    //dataList as rows and render page
-    var qParams = [];
-    for (var p in rows.query) {
-      qParams.push({
-        'customerID': rows.query[p],
-        'customerFirstName': rows.query[p],
-        'customerLastName': rows.query[p],
-      })
-    }
+
     context.dataList = rows;
     res.render('updateCustomers', context);
   })
@@ -264,16 +237,7 @@ app.get('/customers', function (req, res) {
       console.log("Error getting customers");
       return;
     }
-    //else iterate through table, using qParams to push items to rows. Then set
-    //dataList as rows and render page
-    var qParams = [];
-    for (var p in rows.query) {
-      qParams.push({
-        'customerID': rows.query[p],
-        'customerFirstName': rows.query[p],
-        'customerLastName': rows.query[p],
-      })
-    }
+
     context.dataList = rows;
     res.render('customers', context);
   })
@@ -313,15 +277,7 @@ app.get('/galleriesUpdatePage', function (req, res, next) {
       next(err);
       return;
     }
-    //else iterate through table, using qParams to push items to rows. Then set
-    //dataList as rows and render page
-    var qParams = [];
-    for (var p in rows.query) {
-      qParams.push({
-        'galleryID': rows.query[p],
-        'galleryName': rows.query[p],
-      })
-    }
+
     context.dataList = rows;
     res.render('updateGalleries', context);
   })
@@ -386,15 +342,7 @@ app.get('/galleries', function (req, res) {
       console.log("Error getting galleries");
       return;
     }
-    //else iterate through table, using qParams to push items to rows. Then set
-    //dataList as rows and render page
-    var qParams = [];
-    for (var p in rows.query) {
-      qParams.push({
-        'galleryID': rows.query[p],
-        'galleryName': rows.query[p],
-      })
-    }
+
     context.dataList = rows;
     res.render('galleries', context);
   })
@@ -434,22 +382,36 @@ app.get('/paintingsUpdatePage', function (req, res, next) {
       next(err);
       return;
     }
-    //else iterate through table, using qParams to push items to rows. Then set
-    //dataList as rows and render page
-    var qParams = [];
-    for (var p in rows.query) {
-      qParams.push({
-        'paintingID': rows.query[p],
-        'artistID': rows.query[p],
-        'artType': rows.query[p],
-        'price': rows.query[p],
-        'galleryID': rows.query[p]
-      })
-    }
     context.dataList = rows;
-    res.render('updatePaintings', context);
-  })
+
+    mysql.pool.query('SELECT * FROM Galleries ORDER BY galleryID ASC', function (err, galleriesResults, fields) {
+      if (err) { //if error, retur error message
+        console.log("Error getting galleries");
+        return;
+      }
+      context.gallery = galleriesResults;
+
+      mysql.pool.query('SELECT * FROM Orders ORDER BY orderID ASC', function (err, ordersResults, fields) {
+        if (err) { //if error, retur error message
+          console.log("Error getting galleries");
+          return;
+        }
+        context.orders = ordersResults;
+
+        mysql.pool.query('SELECT * FROM Artists ORDER BY artistID ASC', function (err, artistsResults, fields) {
+          if (err) { //if error, retur error message
+            console.log("Error getting galleries");
+            return;
+          }
+          context.artists = artistsResults;
+
+          res.render('updatePaintings', context);
+        })
+      });
+    });
+  });
 });
+
 
 //UPDATING AN PAINTING
 //updates an painting given the input from the user
@@ -480,12 +442,26 @@ app.get('/safeUpdatePaintings', function (req, res, next) {
 
             //if there is a new orderID to update, update the orders page too (this will cause order ID's to cascade down to child foreign keys)
             if (req.query.orderID != "") {
-              mysql.pool.query("UPDATE Orders SET orderID=? WHERE orderID=? ",
-                [req.query.orderID, curVals.orderID],
+
+              //update the painting order
+              mysql.pool.query("UPDATE Paintings SET orderID=? WHERE paintingID=? ",
+                [req.query.orderID, curVals.paintingID],
                 function (err, result) {
                   if (err) {
                     next(err);
                     return;
+                  }
+                  else { //if update successful, display console success message, then render paintings page
+                    context.results = "Updated " + result.changedRows + " rows.";
+                  }
+                });
+
+              //update the OrdersToGalleries table
+              mysql.pool.query("INSERT INTO OrdersToGalleries (galleryID, orderID) VALUES (?, ?)",
+                [req.query.galleryID || curVals.galleryID, req.query.orderID],
+                function (err, result) {
+                  if (err) {
+                    console.log("Duplicate entry in OrdersToGalleries / Not adding");
                   }
                   else { //if update successful, display console success message, then render paintings page
                     context.results = "Updated " + result.changedRows + " rows.";
