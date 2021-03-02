@@ -56,17 +56,38 @@
   <form>
     <fieldset>
       <legend>Add a Painting</legend>
-      <label for="artistIDLable">*Artist ID: </label>
-      <input type="text" name="artistIDForm" id="artistIDForm"></input>
+
+      <label for='artistIDForm'>*Artist: </label>
+      <span>
+        <select id='artistIDForm'>
+          <option>Artists:</option>
+          {{#each artists}}
+          <option value="{{this.artistID}}">{{this.artistFirstName}} {{this.artistLastName}}
+          </option>
+          {{/each}}
+        </select>
+      </span>
       <br>
-      <label for="artTypeLabel">*Art Type: </label>
+
+      <label for=" artTypeLabel">*Art Type: </label>
       <input type="text" name="artTypeForm" id="artTypeForm"></input>
       <br>
       <label for="priceLabel">*Price (in $): </label>
       <input type="text" name="priceForm" id="priceForm"></input>
+
       <br>
-      <label for="galleryIDLabel">*Gallery ID: </label>
-      <input type="text" name="galleryIDForm" id="galleryIDForm"></input>
+      <label for='galleryIDForm'>*Gallery: </label>
+      <span>
+        <select id='galleryIDForm'>
+          <option>Galleries:</option>
+          {{#each galleries}}
+          <option value="{{this.galleryID}}">{{this.galleryName}}
+          </option>
+          {{/each}}
+        </select>
+      </span>
+      <br>
+
       <br>
       <!-- DELETED FORM
       <label for="orderIDLabel">Order ID: </label>

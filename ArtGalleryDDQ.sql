@@ -320,7 +320,7 @@ ALTER TABLE `Orders`
 --
 ALTER TABLE `OrdersToGalleries`
   ADD CONSTRAINT `fk_gallery` FOREIGN KEY (`galleryID`) REFERENCES `Galleries` (`galleryID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_order` FOREIGN KEY (`orderID`) REFERENCES `Orders` (`orderID`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_order` FOREIGN KEY (`orderID`) REFERENCES `Orders` (`orderID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `Paintings`

@@ -1,3 +1,3 @@
 var globalVariable = {
-    number: 8877
+    number: 8875
 };

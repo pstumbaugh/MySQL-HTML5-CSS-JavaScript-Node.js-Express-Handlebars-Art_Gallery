@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 var mysql = require('./dbcon.js');
 
 //port to use (8875 - Testing // 8877 - Live website)
-var port = 8877;
+var port = 8875;
 
 var app = express();
 var handlebars = require('express-handlebars').create({
@@ -572,20 +572,27 @@ app.get('/paintings', function (req, res) {
       console.log("Error getting paintings");
       return;
     }
-    //else iterate through table, using qParams to push items to rows. Then set
-    //dataList as rows and render page
-    var qParams = [];
-    for (var p in rows.query) {
-      qParams.push({
-        'paintingID': rows.query[p],
-        'artistID': rows.query[p],
-        'artType': rows.query[p],
-        'price': rows.query[p],
-        'galleryID': rows.query[p],
-      })
-    }
     context.dataList = rows;
-    res.render('paintings', context);
+
+    //get the galleryID's
+    mysql.pool.query('SELECT * FROM Galleries', function (err, resultsGalleries, fields) {
+      if (err) { //if error, retur error message
+        console.log("Error getting galleries");
+        return;
+      }
+      context.galleries = resultsGalleries;
+
+      //get the artists
+      mysql.pool.query('SELECT * FROM Artists', function (err, resultsArtists, fields) {
+        if (err) { //if error, retur error message
+          console.log("Error getting galleries");
+          return;
+        }
+        context.artists = resultsArtists;
+
+        res.render('paintings', context);
+      });
+    });
   })
 });
 
@@ -623,18 +630,19 @@ app.get('/ordersUpdatePage', function (req, res, next) {
       next(err);
       return;
     }
-    //else iterate through table, using qParams to push items to rows. Then set
-    //dataList as rows and render page
-    var qParams = [];
-    for (var p in rows.query) {
-      qParams.push({
-        'orderID': rows.query[p],
-        'customerID': rows.query[p],
-      })
-    }
     context.dataList = rows;
-    res.render('updateOrders', context);
-  })
+
+    //get the customers's
+    mysql.pool.query('SELECT * FROM Customers', function (err, resultsCustomers, fields) {
+      if (err) { //if error, retur error message
+        console.log("Error getting galleries");
+        return;
+      }
+      context.customers = resultsCustomers;
+
+      res.render('updateOrders', context);
+    })
+  });
 });
 
 //UPDATING AN ORDER

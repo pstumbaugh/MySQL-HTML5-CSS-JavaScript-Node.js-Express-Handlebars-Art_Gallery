@@ -37,11 +37,21 @@
 
   <form>
     <fieldset>
-      <legend> What customer ID would you like to update this order to? When finished, hit the Done button. Anything
-        left blank will retain it's value.</legend>
-      <label for="customerIDForm">Customer ID: </label>
-      <input type="text" name="customerIDForm" id="customerIDForm">
+      <legend> What customer ID would you like to update this order to? When finished, hit the Done button. If
+        left blank, it will retain it's value.</legend>
+
+      <p>
+        <label for='customerIDForm'></label><br>
+        <select id='customerIDForm'>
+          <option>Choose customer:</option>
+          {{#each customers}}
+          <option id="customerIDForm" value="{{this.customerID}}">{{this.customerFirstName}} {{this.customerLastName}}
+          </option>
+          {{/each}}
+        </select>
+      </p>
       <br>
+
       <!-- update button sends update request to server, then redirects back to the original page -->
       <div type="button" id="updateButton">
       </div>
