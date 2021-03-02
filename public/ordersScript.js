@@ -18,6 +18,7 @@ function addButtonClick() {
   payloadPaintingID[1] = document.getElementById("paintingsToChoose2").value;
   payloadPaintingID[2] = document.getElementById("paintingsToChoose3").value;
   payloadPaintingID[3] = document.getElementById("paintingsToChoose4").value;
+  payloadPaintingID[4] = document.getElementById("paintingsToChoose5").value;
 
 
   //check if nothing was selected, if so, use 0
@@ -26,33 +27,30 @@ function addButtonClick() {
       payloadPaintingID[a] = 0;
   }
 
+  console.log(payloadCustomerID);
+  debugger;
+
   //if one of the items in the table is not filled out, display error about that item
   //(after this, it will check all items are filled in. If not, it will error and not add to table)
-  if (payloadCustomerID == undefined || payloadCustomerID == "") {
+  if (payloadCustomerID == undefined || payloadCustomerID == "Choose customer:") {
     document.getElementById("addErrorNameCustomerID").textContent = "ERROR: Missing customer ID";
     event.preventDefault();
   } else document.getElementById("addErrorNameCustomerID").textContent = "";
   if (payloadPaintingID[0] == undefined || payloadPaintingID[0] == "") {
-    document.getElementById("addErrorPaintingsID").textContent = "ERROR: Missing paintingID";
+    document.getElementById("addErrorPaintingsID").textContent = "ERROR: Missing first paintingID";
     event.preventDefault();
   } else document.getElementById("addErrorPaintingsID").textContent = "";
 
-  /*
-  //remove any whitespace characters
-  payloadPaintingIDinitial.replace(/ /g, "");
-  //split the string into numbers by splitting it
-  var payloadPaintingID = payloadPaintingIDinitial.split(",");
-*/
+
+
+
   //stuff to send to the POST request
   var payload = {};
   payload.payloadCustomerID = payloadCustomerID;
   payload.payloadPaintingID = payloadPaintingID;
 
-
-
   //check if all (required) items are fileld out. If so, continue on sending the data to the database, else display error and don't do anything
-  if (payloadCustomerID != "" && payloadPaintingID[0] != "") {
-
+  if (payloadCustomerID != "Choose customer:" && payloadPaintingID[0] != "") {
 
     //SEND INITIAL ORDER (CREATES A NEW ORDER AND ADDS FIRST PAINTING)
     //send an insert request to our server via GET
@@ -76,7 +74,7 @@ function addButtonClick() {
         }
         else if (req.status === 400) //gallery ID not found
         {
-          alert("Invalid Painting ID given, please try again.");
+          alert("First Painting ID invalid, please try again.");
           return;
         }
         event.preventDefault();
@@ -88,53 +86,56 @@ function addButtonClick() {
     req.send(JSON.stringify(payload));
     event.preventDefault();
 
+    //wait 1 second, then execute rest:
+    var delayInMilliseconds = 1000; //1 second
+    setTimeout(function () {
+      //add in any extra paintings to new order number
+      for (var i = 1; i < payloadPaintingID.length && payloadPaintingID[i] != 0; i++) {
+        var req2 = new XMLHttpRequest();
+        payload.currentPayloadPaintingID = payloadPaintingID[i];
 
-    //add in any extra paintings to new order number
-    for (var i = 1; i < payloadPaintingID.length && payloadPaintingID[i] != 0; i++) {
+        //send an insert request to our server via GET
+        req2.open("POST", "http://flip1.engr.oregonstate.edu:" + port + "/moreOrders", true);
 
-      var req2 = new XMLHttpRequest();
-      payload.currentPayloadPaintingID = payloadPaintingID[i];
+        //for post request, set the header:
+        req2.setRequestHeader('Content-Type', 'application/json');
 
-      //send an insert request to our server via GET
-      req2.open("POST", "http://flip1.engr.oregonstate.edu:" + port + "/moreOrders", true);
-
-      //for post request, set the header:
-      req2.setRequestHeader('Content-Type', 'application/json');
-
-      //add event listener for async request (function)
-      req2.addEventListener('load', function () {
-        console.log("Adding order request status: " + req2.status); //for testing
-        if (req2.status >= 200 && req2.status < 400) {
-          //if request send is good do this:
-          console.log("Success in adding order");
-        } else { //if error:
-          console.log("Error in network request: " + req2.statusText);
-          if (req2.status === 409) //bad customer request:
-          {
-            alert("Invalid Customer ID given, please try again.");
+        //add event listener for async request (function)
+        req2.addEventListener('load', function () {
+          console.log("Adding order request status: " + req2.status); //for testing
+          if (req2.status >= 200 && req2.status < 400) {
+            //if request send is good do this:
+            console.log("Success in adding order");
+          } else { //if error:
+            console.log("Error in network request: " + req2.statusText);
+            if (req2.status === 409) //bad customer request:
+            {
+              alert("Invalid Customer ID given, please try again.");
+              event.preventDefault();
+              window.location.replace('./orders');
+              return;
+            }
+            else if (req2.status === 400) //gallery ID not found
+            {
+              alert("Invalid Painting ID given, please try again.\n NOTE: Paintings before this ID were added successfully");
+              event.preventDefault();
+              window.location.replace('./orders');
+              return;
+            }
             event.preventDefault();
-            window.location.replace('./orders');
-            return;
-          }
-          else if (req2.status === 400) //gallery ID not found
-          {
-            alert("Invalid Painting ID given, please try again.\n NOTE: Paintings before this ID were added successfully");
-            event.preventDefault();
-            window.location.replace('./orders');
-            return;
           }
           event.preventDefault();
-        }
-        event.preventDefault();
-      });
+        });
 
-      //send the request
-      req2.send(JSON.stringify(payload));
-    }
+        //send the request
+        req2.send(JSON.stringify(payload));
+      }
+    }, delayInMilliseconds);
+
+    alert("Painting(s) added successfully to order");
+    event.preventDefault();
+    window.location.replace('./orders');
   }
-  alert("Painting(s) added successfully to order");
-  event.preventDefault();
-  window.location.replace('./orders');
   return;
 }
 
@@ -153,6 +154,9 @@ function deleteID(id) {
     }
   })
 };
+
+
+
 
 
 

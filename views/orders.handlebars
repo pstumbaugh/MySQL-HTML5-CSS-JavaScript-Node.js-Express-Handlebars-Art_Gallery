@@ -83,9 +83,9 @@
 
 
       <span>
-        <label for='paintingsToChoose1'>Paintings Available (choose up to 4):</label><br>
+        <label for='paintingsToChoose1'>Paintings Available (please choose up to 5):</label><br>
         <select id='paintingsToChoose1'>
-          <option>Choose painting:</option>
+          <option>Choose painting 1:</option>
           {{#each paintings}}
           <option value="{{this.paintingID}}">{{this.paintingID}}
           </option>
@@ -95,7 +95,7 @@
       <br>
       <span>
         <select id='paintingsToChoose2'>
-          <option>Choose painting:</option>
+          <option>Choose painting 2:</option>
           {{#each paintings}}
           <option value="{{this.paintingID}}">{{this.paintingID}}
           </option>
@@ -105,7 +105,7 @@
       <br>
       <span>
         <select id='paintingsToChoose3'>
-          <option>Choose painting:</option>
+          <option>Choose painting 3:</option>
           {{#each paintings}}
           <option value="{{this.paintingID}}">{{this.paintingID}}
           </option>
@@ -115,7 +115,7 @@
       <br>
       <span>
         <select id='paintingsToChoose4'>
-          <option>Choose painting:</option>
+          <option>Choose painting 4:</option>
           {{#each paintings}}
           <option value="{{this.paintingID}}">{{this.paintingID}}
           </option>
@@ -123,6 +123,17 @@
         </select>
       </span>
       <br>
+      <span>
+        <select id='paintingsToChoose5'>
+          <option>Choose painting 5:</option>
+          {{#each paintings}}
+          <option value="{{this.paintingID}}">{{this.paintingID}}
+          </option>
+          {{/each}}
+        </select>
+      </span>
+      <br>
+
 
 
       <!-- OLD VERSION
@@ -152,8 +163,6 @@
 
 
   <br><br>
-
-
   <script src="portNumber.js"></script>
   <script src="ordersScript.js"></script>
 </body>

@@ -59,7 +59,6 @@ function addButtonClick() {
     req.addEventListener('load', function () {
       console.log("Adding paintings request status: " + req.status); //for testing
       if (req.status >= 200 && req.status < 400) {
-        debugger;
         //if request send is good do this:
         console.log("Success in adding painting");
       } else { //if error:
@@ -79,13 +78,19 @@ function addButtonClick() {
     //send the request
     req.send(JSON.stringify(payload));
 
-    //refreshing page
-    location.reload();
+    //alert("Painting Added Successfully!");
 
+    //reload the window without refreshing page
+
+
+    setTimeout(function () {
+      window.location.reload();
+    }, 3000);
+
+    window.location.href = window.location.href;
   }
   return;
 }
-
 
 
 
@@ -101,6 +106,7 @@ function deleteID(id) {
     }
   })
 };
+
 
 
 
