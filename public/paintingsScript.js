@@ -10,6 +10,7 @@ document.getElementById("paintingAdderButton").appendChild(addButton);
 
 //When client clicks the add a gallery submit button:
 function addButtonClick() {
+
   var req = new XMLHttpRequest(); //create new request
 
   //get the values entered by user
@@ -20,8 +21,8 @@ function addButtonClick() {
 
   //if one of the items in the table is not filled out, display error about that item
   //(after this, it will check all items are filled in. If not, it will error and not add to table)
-  if (payloadArtistID == undefined || payloadArtistID == "") {
-    document.getElementById("addErrorNameArtistID").textContent = "ERROR: Missing artist ID";
+  if (payloadArtistID == undefined || payloadArtistID == "Artists:") {
+    document.getElementById("addErrorNameArtistID").textContent = "ERROR: Missing artist";
     event.preventDefault();
   } else document.getElementById("addErrorNameArtistID").textContent = "";
   if (payloadArtType == undefined || payloadArtType == "") {
@@ -32,11 +33,10 @@ function addButtonClick() {
     document.getElementById("addErrorNamePrice").textContent = "ERROR: Missing price";
     event.preventDefault();
   } else document.getElementById("addErrorNamePrice").textContent = "";
-  if (payloadGalleryID == undefined || payloadGalleryID == "") {
-    document.getElementById("addErrorNameGalleryID").textContent = "ERROR: Missing gallery ID";
+  if (payloadGalleryID == undefined || payloadGalleryID == "Galleries:") {
+    document.getElementById("addErrorNameGalleryID").textContent = "ERROR: Missing gallery";
     event.preventDefault();
   } else document.getElementById("addErrorNameGalleryID").textContent = "";
-
 
   //stuff to send to the POST request
   var payload = {};
@@ -45,9 +45,10 @@ function addButtonClick() {
   payload.payloadPrice = payloadPrice;
   payload.payloadGalleryID = payloadGalleryID;
 
+  debugger;
 
   //check if all (required) items are fileld out. If so, continue on sending the data to the database, else display error and don't do anything
-  if (payloadArtistID != "" && payloadArtType != "" && payloadPrice != "" && payloadGalleryID != "") {
+  if (payloadArtistID != "Artists:" && payloadArtType != "" && payloadPrice != "" && payloadGalleryID != "Galleries:") {
 
     //send an insert request to our server via GET
     req.open("POST", "http://flip1.engr.oregonstate.edu:" + port + "/paintings", true);
@@ -78,16 +79,19 @@ function addButtonClick() {
     //send the request
     req.send(JSON.stringify(payload));
 
-    //alert("Painting Added Successfully!");
-
-    //reload the window without refreshing page
-
-
+    //reload the window with new painting
+    /*
     setTimeout(function () {
       window.location.reload();
     }, 3000);
+    */
 
-    window.location.href = window.location.href;
+    alert("Painting Added Successfully!");
+    //reload the window without refreshing page
+    window.location.reload(true);
+    event.preventDefault();
+
+    //window.location.href = window.location.href;
   }
   return;
 }

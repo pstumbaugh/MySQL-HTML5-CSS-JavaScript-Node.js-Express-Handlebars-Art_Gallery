@@ -18,6 +18,8 @@ function updateButtonClick() {
   var payloadOrderID = row.firstElementChild.textContent; //This is the SQL ID number
   var payloadCustomerID = document.getElementById("customerIDForm").value;
 
+  debugger;
+
   //send an insert request to our server via GET
   req.open("GET", "http://flip1.engr.oregonstate.edu:" + port + "/safeUpdateOrders?orderID=" + payloadOrderID + "&customerID=" + payloadCustomerID, true);
   //add event listener for async request (function)

@@ -20,10 +20,11 @@ function addButtonClick() {
   payloadPaintingID[3] = document.getElementById("paintingsToChoose4").value;
   payloadPaintingID[4] = document.getElementById("paintingsToChoose5").value;
 
-
+  debugger;
   //check if nothing was selected, if so, use 0
   for (var a = 0; a < payloadPaintingID.length; a++) {
-    if (payloadPaintingID[a] == "Choose painting:")
+    console.log("Choose painting " + (a + 1) + ":");
+    if (payloadPaintingID[a] == "Choose painting " + (a + 1) + ":")
       payloadPaintingID[a] = 0;
   }
 
@@ -40,8 +41,6 @@ function addButtonClick() {
     document.getElementById("addErrorPaintingsID").textContent = "ERROR: Missing first paintingID";
     event.preventDefault();
   } else document.getElementById("addErrorPaintingsID").textContent = "";
-
-
 
 
   //stuff to send to the POST request
@@ -86,49 +85,52 @@ function addButtonClick() {
     req.send(JSON.stringify(payload));
     event.preventDefault();
 
-    //wait 1 second, then execute rest:
+    //wait 1 second, then add other paintings in order:
     var delayInMilliseconds = 1000; //1 second
     setTimeout(function () {
       //add in any extra paintings to new order number
-      for (var i = 1; i < payloadPaintingID.length && payloadPaintingID[i] != 0; i++) {
-        var req2 = new XMLHttpRequest();
-        payload.currentPayloadPaintingID = payloadPaintingID[i];
+      for (var i = 1; i < payloadPaintingID.length; i++) {
+        //check if there is a painting to add (if not, do nothing, loop to next item):
+        if (payloadPaintingID[i] != 0) {
+          var req2 = new XMLHttpRequest();
+          payload.currentPayloadPaintingID = payloadPaintingID[i];
 
-        //send an insert request to our server via GET
-        req2.open("POST", "http://flip1.engr.oregonstate.edu:" + port + "/moreOrders", true);
+          //send an insert request to our server via GET
+          req2.open("POST", "http://flip1.engr.oregonstate.edu:" + port + "/moreOrders", true);
 
-        //for post request, set the header:
-        req2.setRequestHeader('Content-Type', 'application/json');
+          //for post request, set the header:
+          req2.setRequestHeader('Content-Type', 'application/json');
 
-        //add event listener for async request (function)
-        req2.addEventListener('load', function () {
-          console.log("Adding order request status: " + req2.status); //for testing
-          if (req2.status >= 200 && req2.status < 400) {
-            //if request send is good do this:
-            console.log("Success in adding order");
-          } else { //if error:
-            console.log("Error in network request: " + req2.statusText);
-            if (req2.status === 409) //bad customer request:
-            {
-              alert("Invalid Customer ID given, please try again.");
+          //add event listener for async request (function)
+          req2.addEventListener('load', function () {
+            console.log("Adding order request status: " + req2.status); //for testing
+            if (req2.status >= 200 && req2.status < 400) {
+              //if request send is good do this:
+              console.log("Success in adding order");
+            } else { //if error:
+              console.log("Error in network request: " + req2.statusText);
+              if (req2.status === 409) //bad customer request:
+              {
+                alert("Invalid Customer ID given, please try again.");
+                event.preventDefault();
+                window.location.replace('./orders');
+                return;
+              }
+              else if (req2.status === 400) //gallery ID not found
+              {
+                alert("Invalid Painting ID given, please try again.\n NOTE: Paintings before this ID were added successfully");
+                event.preventDefault();
+                window.location.replace('./orders');
+                return;
+              }
               event.preventDefault();
-              window.location.replace('./orders');
-              return;
-            }
-            else if (req2.status === 400) //gallery ID not found
-            {
-              alert("Invalid Painting ID given, please try again.\n NOTE: Paintings before this ID were added successfully");
-              event.preventDefault();
-              window.location.replace('./orders');
-              return;
             }
             event.preventDefault();
-          }
-          event.preventDefault();
-        });
+          });
 
-        //send the request
-        req2.send(JSON.stringify(payload));
+          //send the request
+          req2.send(JSON.stringify(payload));
+        }
       }
     }, delayInMilliseconds);
 
