@@ -22,18 +22,21 @@
   <!-- Customer Search form -->
   <h1>Custom Search:</h1>
   <br><br>
-  <form id="search" method="POST" action="/search">
-    <fieldset>
+  <form id="search" method="POST" action="/search" width= "75%">
+    <fieldset style="width:700px">
       <legend>Search</legend>
       <!-- List of checkbox and search types -->
       <ul style="list-style-type:none;">
         <li><input name="check" type="checkbox" id="customerSearch" value="Customers"> Customer Last Name</input>
         <li><input name="check" type="checkbox" id="paintingSearch" value="Paintings"> Painting ID</input>
         <li><input name="check" type="checkbox" id="orderSearch" value="Orders"> Order ID</input>
+        <li><input name="check" type="checkbox" id="artistSearch" value="Artists"> Artist Last Name</input>
+        <li><input name="check" type="checkbox" id="gallerySearch" value="Galleries"> Gallery ID</input>
       </ul>
-      <input type="text" name="searchForm" id="searchForm"></input>
       <br>
-      <input type="submit" value="submit">
+      <input type="text" name="searchForm" id="searchForm" style="width:375px"></input>
+      <br>
+      <input type="submit" value="submit" style="width:191px">
       </div>
     </fieldset>
   </form>

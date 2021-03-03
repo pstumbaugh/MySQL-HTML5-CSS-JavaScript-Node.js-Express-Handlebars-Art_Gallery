@@ -852,7 +852,7 @@ app.get('/orders', function (req, res) {
       });
 
       //get the paintingID's
-      mysql.pool.query('SELECT paintingID FROM Paintings WHERE orderID IS NULL', function (err, resultsPaintingsForSale, fields) {
+      mysql.pool.query('SELECT paintingID, artType FROM Paintings WHERE orderID IS NULL', function (err, resultsPaintingsForSale, fields) {
         if (err) { //if error, retur error message
           console.log("Error getting paintings");
           return;
@@ -886,8 +886,8 @@ app.post('/search', urlencodedParser, function (req, res) {
   var Search = req.body.searchForm
   var SearchDatabase = req.body.check
   var SearchType = ""
+  Search = '\'' + Search + '\''
   if (SearchDatabase == "Customers") {
-    Search = '\'' + Search + '\''
     SearchType = "customerLastName"
   }
   else if (SearchDatabase == "Paintings") {
@@ -896,7 +896,12 @@ app.post('/search', urlencodedParser, function (req, res) {
   else if (SearchDatabase == "Orders") {
     SearchType = "orderID"
   }
-
+  else if (SearchDatabase == "Artists") {
+    SearchType = "artistLastName"
+  }
+  else if (SearchDatabase == "Galleries") {
+    SearchType = "galleryID"
+  }
   mysql.pool.query('SELECT * FROM '.concat(SearchDatabase, ' WHERE ', SearchType, ' = ', Search), function (err, results, fields) {
     if (err) { //if error, return error message
       console.log("Error getting search");
@@ -905,6 +910,9 @@ app.post('/search', urlencodedParser, function (req, res) {
     }
     else if (results) {
       console.log(results)
+      if (results[0]==null){
+        context.error = [{ error: "Search Result Not Found" }]
+      }
       context.dataList = results
       res.render('search', context);
     }
@@ -914,9 +922,7 @@ app.post('/search', urlencodedParser, function (req, res) {
 
 
 
-
-
-
+//-------------------SERVER SECTION--------------------------------------------------------------//
 app.use(function (req, res) {
   res.status(404);
   res.render('404');
