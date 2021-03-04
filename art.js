@@ -886,7 +886,7 @@ app.post('/search', urlencodedParser, function (req, res) {
   var Search = req.body.searchForm
   var SearchDatabase = req.body.check
   var SearchType = ""
-  Search = '\'' + Search + '\''
+  //Search = '\'' + Search + '\''
   if (SearchDatabase == "Customers") {
     SearchType = "customerLastName"
   }
@@ -902,7 +902,8 @@ app.post('/search', urlencodedParser, function (req, res) {
   else if (SearchDatabase == "Galleries") {
     SearchType = "galleryID"
   }
-  mysql.pool.query('SELECT * FROM '.concat(SearchDatabase, ' WHERE ', SearchType, ' = ', Search), function (err, results, fields) {
+
+  mysql.pool.query('SELECT * FROM '.concat(SearchDatabase, ' WHERE ', SearchType, ' = \"' + Search + '\"'), function (err, results, fields) {
     if (err) { //if error, return error message
       console.log("Error getting search");
       context.error = [{ error: "Missing checkbox or text input" }]
@@ -910,7 +911,7 @@ app.post('/search', urlencodedParser, function (req, res) {
     }
     else if (results) {
       console.log(results)
-      if (results[0]==null){
+      if (results[0] == null) {
         context.error = [{ error: "Search Result Not Found" }]
       }
       context.dataList = results
