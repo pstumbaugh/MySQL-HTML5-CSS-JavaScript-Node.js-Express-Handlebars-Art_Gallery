@@ -24,10 +24,10 @@
   <!--Display our current data table-->
   <table class="row" style="float: left;margin-right:30px" id="currentTable">
     <th>Painting ID</th>
-    <th>Artist ID</th>
+    <th>Artist</th>
     <th>Art Type</th>
     <th>Price ($)</th>
-    <th>Gallery ID</th>
+    <th>Gallery</th>
     <th>Order ID</th>
     <th></th>
     <th></th>
@@ -35,10 +35,10 @@
     {{#each dataList}}
     <tr id="newRow">
       <td id="paintingID">{{this.paintingID}}</td>
-      <td id="artistID">{{this.artistID}}</td>
+      <td id="artistID">{{this.artistFirstName}} {{this.artistLastName}}</td>
       <td id="artType">{{this.artType}}</td>
-      <td id="price">{{this.price}}</td>
-      <td id="galleryID">{{this.galleryID}}</td>
+      <td id="price">${{this.price}}</td>
+      <td id="galleryID">{{this.galleryName}}</td>
       <td id="orderID">{{this.orderID}}</td>
 
       <td><button type="button" onclick="deleteID({{paintingID}})">Delete</button></td>

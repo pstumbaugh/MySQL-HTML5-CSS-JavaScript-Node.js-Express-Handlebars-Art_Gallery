@@ -26,14 +26,14 @@
     <h1>Orders Results:</h1>
 
     <th>Order ID</th>
-    <th>Customer ID</th>
+    <th>Customer</th>
     <th></th>
     <th></th>
 
     {{#each dataList}}
     <tr id="newRow">
       <td id="orderID">{{this.orderID}}</td>
-      <td id="customerID">{{this.customerID}}</td>
+      <td id="customerID">{{this.customerFirstName}} {{this.customerLastName}}</td>
 
       <td><button type="button" onclick="deleteID({{orderID}})">Delete</button></td>
       <td><button type="button" onclick="location.href='/ordersUpdatePage?id='+{{this.orderID}}">Update</button>
@@ -48,12 +48,12 @@
     <h1>Orders To Galleries Results:</h1>
 
     <th>Order ID</th>
-    <th>Gallery ID</th>
+    <th>Gallery</th>
 
     {{#each dataListMToM}}
     <tr id="newRow">
       <td id="orderID">{{this.orderID}}</td>
-      <td id="galleryID">{{this.galleryID}}</td>
+      <td id="galleryID">{{this.galleryName}}</td>
     </tr>
     {{/each}}
   </table>

@@ -377,7 +377,7 @@ app.delete('/deletePainting/:id', function (req, res) {
 //Gets the painting via the ID, sent back as datalist
 app.get('/paintingsUpdatePage', function (req, res, next) {
   var context = {};
-  mysql.pool.query("SELECT * FROM Paintings WHERE paintingID=?", [req.query.id], function (err, rows, fields) {
+  mysql.pool.query("SELECT * FROM Paintings p INNER JOIN Galleries g ON p.galleryID = g.galleryID INNER JOIN Artists a ON p.artistID = a.artistID WHERE paintingID = ?", [req.query.id], function (err, rows, fields) {
     if (err) { //if error, return error message
       next(err);
       return;
@@ -436,60 +436,104 @@ app.get('/safeUpdatePaintings', function (req, res, next) {
             next(err);
             return;
           }
-          else { //if update successful, display console success message, then render paintings page
-            context.results = "Updated " + result.changedRows + " rows.";
-
-
+          else {
             //if there is a new orderID to update, update the orders page too (this will cause order ID's to cascade down to child foreign keys)
             if (req.query.orderID != "") {
 
-              //update the painting order
-              mysql.pool.query("UPDATE Paintings SET orderID=? WHERE paintingID=? ",
-                [req.query.orderID, curVals.paintingID],
-                function (err, result) {
-                  if (err) {
-                    next(err);
-                    return;
-                  }
-                  else { //if update successful, display console success message, then render paintings page
-                    context.results = "Updated " + result.changedRows + " rows.";
-                  }
-                });
+              if (req.query.orderID != "NULL") { //if orderID is a not a NULL value
+                //update the painting order
+                mysql.pool.query("UPDATE Paintings SET orderID=? WHERE paintingID=? ",
+                  [req.query.orderID, curVals.paintingID],
+                  function (err, result) {
+                    if (err) {
+                      next(err);
+                      return;
+                    }
+                    else { //if update successful, display console success message, then render paintings page
+                      context.results = "Updated " + result.changedRows + " rows.";
+                    }
+                  });
 
-              //update the OrdersToGalleries table
-              mysql.pool.query("INSERT INTO OrdersToGalleries (galleryID, orderID) VALUES (?, ?)",
-                [req.query.galleryID || curVals.galleryID, req.query.orderID],
-                function (err, result) {
-                  if (err) {
-                    console.log("Duplicate entry in OrdersToGalleries / Not adding");
-                  }
-                  else { //if update successful, display console success message, then render paintings page
-                    context.results = "Updated " + result.changedRows + " rows.";
-                  }
-                });
-            }
+              } else { //if orderID is a NULL value, set it as null:
+                //get the current galleryID and orderID (the orderID before setting it as null)
+                var tempGalleryID = req.query.galleryID || curVals.galleryID;
+                var tempOrderID = curVals.orderID;
 
-            //if there is a new galleryID to update, update the ordersToGalleries page too
-            if (req.query.galleryID != "") {
-              mysql.pool.query("UPDATE OrdersToGalleries SET galleryID=? WHERE orderID=? ",
-                [req.query.galleryID, req.query.orderID || curVals.orderID],
-                function (err, result) {
-                  if (err) {
-                    next(err);
-                    return;
-                  }
-                  else { //if update successful, display console success message, then render paintings page
-                    context.results = "Updated " + result.changedRows + " rows.";
-                  }
-                });
-            }
+                if (tempOrderID == null) {//do nothing, no order ID to update
+                  console.log("ORDER ID already NULL! Not changing the order ID in this query.");
 
+                } else {//do stuff to update order ID to null
 
-            res.render('paintings', context);
+                  mysql.pool.query("SELECT * FROM `Paintings` WHERE orderID = ? AND galleryID = ?", [tempOrderID, tempGalleryID], function (err, nullPaintingsResults) {
+                    console.log("Number of items in Paintings that already have that order number: " + nullPaintingsResults.length);
+
+                    if (nullPaintingsResults.length > 1) {
+                      console.log("More than one painting with the same gallery in the same order -- doing nothing to OrdersToGalleries table");
+                    }
+                    else { //If only 1 result, remove that orderID and galleryID relation from the OrdersToGalleries table
+                      console.log("BEFORE DELETION: current orderID: " + tempOrderID);
+                      console.log("BEFORE DELETION: current galleryID: " + tempGalleryID);
+
+                      mysql.pool.query("DELETE FROM OrdersToGalleries WHERE orderID = ? AND galleryID = ?", [tempOrderID, tempGalleryID], function (err, result) {
+                        if (err) {
+                          next(err);
+                          return;
+                        }
+                      });
+                    }
+
+                    //Finally, update the painting to show a NULL orderID:
+                    mysql.pool.query("UPDATE Paintings SET orderID=NULL WHERE paintingID=?",
+                      [curVals.paintingID],
+                      function (err, result) {
+                        if (err) {
+                          next(err);
+                          return;
+                        }
+                        else { //if update successful, display console success message, then render paintings page
+                          context.results = "Updated " + result.changedRows + " rows.";
+                        }
+                      });
+                  }
+                  )
+                }
+              }
+            };
           }
-        });
 
-    }
+          //if there's a new orderID to add, update the table:
+          if (req.query.orderID != "NULL" && req.query.orderID != "") {
+            //update the OrdersToGalleries table
+            mysql.pool.query("INSERT INTO OrdersToGalleries (galleryID, orderID) VALUES (?, ?)",
+              [req.query.galleryID || curVals.galleryID, req.query.orderID],
+              function (err, result) {
+                if (err) {
+                  console.log("Duplicate entry in OrdersToGalleries / Not adding");
+                }
+                else { //if update successful, display console success message, then render paintings page
+                  context.results = "Updated " + result.changedRows + " rows.";
+                }
+              });
+          }
+          //if there is a new galleryID to update, update the ordersToGalleries page too
+          if (req.query.galleryID != "" && req.query.orderID != "NULL") {
+            mysql.pool.query("UPDATE OrdersToGalleries SET galleryID=? WHERE orderID=? ",
+              [req.query.galleryID, req.query.orderID || curVals.orderID],
+              function (err, result) {
+                if (err) {
+                  next(err);
+                  return;
+                }
+                else { //if update successful, display console success message, then render paintings page
+                  context.results = "Updated " + result.changedRows + " rows.";
+                }
+              });
+          }
+
+
+          res.render('paintings', context);
+        })
+    };
   });
 });
 
@@ -543,14 +587,14 @@ app.post('/paintings', function (req, res) {
 //Gets all paintings from the data base, returns it as dataList
 app.get('/paintings', function (req, res) {
   var context = {};
-  mysql.pool.query('SELECT * FROM Paintings', function (err, rows, fields) {
+  mysql.pool.query('SELECT * FROM Paintings p INNER JOIN Galleries g ON p.galleryID = g.galleryID INNER JOIN Artists a ON p.artistID = a.artistID ORDER BY paintingID', function (err, rows, fields) {
     if (err) { //if error, retur error message
       console.log("Error getting paintings");
       return;
     }
     context.dataList = rows;
 
-    //get the galleryID's
+    //get the galleryID's (for add new painting section)
     mysql.pool.query('SELECT * FROM Galleries', function (err, resultsGalleries, fields) {
       if (err) { //if error, retur error message
         console.log("Error getting galleries");
@@ -558,7 +602,7 @@ app.get('/paintings', function (req, res) {
       }
       context.galleries = resultsGalleries;
 
-      //get the artists
+      //get the artists (for add new painting section)
       mysql.pool.query('SELECT * FROM Artists', function (err, resultsArtists, fields) {
         if (err) { //if error, retur error message
           console.log("Error getting galleries");
@@ -601,7 +645,7 @@ app.delete('/deleteOrder/:id', function (req, res) {
 //Gets the order via the ID, sent back as datalist
 app.get('/ordersUpdatePage', function (req, res, next) {
   var context = {};
-  mysql.pool.query("SELECT * FROM Orders WHERE orderID=?", [req.query.id], function (err, rows, fields) {
+  mysql.pool.query("SELECT * FROM Orders INNER JOIN Customers ON Orders.customerID = Customers.customerID WHERE orderID=?", [req.query.id], function (err, rows, fields) {
     if (err) { //if error, return error message
       next(err);
       return;
@@ -826,7 +870,7 @@ app.post('/moreOrders', function (req, res) {
 app.get('/orders', function (req, res) {
   var context = {};
   //get the current orders table
-  mysql.pool.query('SELECT * FROM Orders ORDER BY orderID', function (err, rows, fields) {
+  mysql.pool.query('SELECT * FROM Orders INNER JOIN Customers ON Orders.customerID = Customers.customerID ORDER BY orderID', function (err, rows, fields) {
     if (err) { //if error, retur error message
       console.log("Error getting orders");
       return;
@@ -835,7 +879,7 @@ app.get('/orders', function (req, res) {
 
 
     //get the ordersToGalleries table
-    mysql.pool.query('SELECT * FROM OrdersToGalleries ORDER BY orderID', function (err, resultsMM, fields) {
+    mysql.pool.query('SELECT * FROM OrdersToGalleries INNER JOIN Galleries ON OrdersToGalleries.galleryID = Galleries.galleryID ORDER BY orderID', function (err, resultsMM, fields) {
       if (err) { //if error, retur error message
         console.log("Error getting OrdersToGalleries");
         return;

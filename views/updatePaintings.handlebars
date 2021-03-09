@@ -21,18 +21,18 @@
   <!--Display the item being updated -->
   <table id="currentTable">
     <th>Painting ID</th>
-    <th>Artist ID</th>
+    <th>Artist</th>
     <th>Art Type</th>
     <th>Price</th>
-    <th>Gallery ID</th>
+    <th>Gallery</th>
     <th>Order ID</th>
     {{#each dataList}}
     <tr id="newRow">
       <td>{{this.paintingID}}</td>
-      <td>{{this.artistID}}</td>
+      <td>{{this.artistFirstName}} {{this.artistLastName}}</td>
       <td>{{this.artType}}</td>
-      <td>{{this.price}}</td>
-      <td>{{this.galleryID}}</td>
+      <td>${{this.price}}</td>
+      <td>{{this.galleryName}}</td>
       <td>{{this.orderID}}</td>
     </tr>
     {{/each}}
@@ -79,6 +79,8 @@
       <label>Order Number: </label>
       <select id='orderIDForm'>
         <option></option>
+        <!-- -->
+        <option value="NULL">Remove painting from order (make nullable)</option>
         {{#each orders}}
         <option id="orderIDForm" value="{{this.orderID}}">{{this.orderID}}
         </option>
