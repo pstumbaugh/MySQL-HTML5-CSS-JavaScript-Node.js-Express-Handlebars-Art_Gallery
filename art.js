@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 var mysql = require('./dbcon.js');
 
 //port to use (8875 - Testing // 8877 - Live website)
-var port = 8875;
+var port = 8877;
 
 var app = express();
 var handlebars = require('express-handlebars').create({
@@ -640,6 +640,43 @@ app.delete('/deleteOrder/:id', function (req, res) {
   })
 });
 
+//DELETE FROM ORDERS TO GALLERIES TABLE
+//Deletes an order from the table using the ID
+app.delete('/deleteOTG/:orderID,:galleryID', function (req, res) {
+  console.log("-- Deleting from OrdersToGalleries table -- ");
+  console.log("ORDER ID: " + req.params.orderID);
+  console.log("GALLERY: " + req.params.galleryID);
+
+  //remove from OrdersToGalleries table
+  var otgDeleteSql = "DELETE FROM OrdersToGalleries WHERE orderID = ? AND galleryID = ?";
+  var inserts = [req.params.orderID, req.params.galleryID];
+  otgDeleteSql = mysql.pool.query(otgDeleteSql, inserts, function (error, results, fields) {
+    if (error) { //if error, log it in the console
+      console.log(error)
+      res.write(JSON.stringify(error));
+      res.status(400);
+      res.end();
+    } else {
+      console.log("-- Making orderID NULL from Paintings table -- ");
+      console.log("ORDER ID: " + req.params.orderID);
+      console.log("GALLERY: " + req.params.galleryID);
+      //remove orderID from paintings table
+      var paintingsDeleteSql = "UPDATE Paintings SET orderID=NULL WHERE orderID=? AND galleryID = ?";
+      var inserts2 = [req.params.orderID, req.params.galleryID];
+      paintingsDeleteSql = mysql.pool.query(paintingsDeleteSql, inserts2, function (error, results, fields) {
+        if (error) { //if error, log it in the console
+          console.log(error)
+          res.write(JSON.stringify(error));
+          res.status(400);
+          res.end();
+        } else { //if success, return 202 status
+          res.status(202).end();
+        }
+      })
+    }
+  });
+});
+
 //UPDATE ORDERS PAGE
 //page for the order that the user is wanting to update.
 //Gets the order via the ID, sent back as datalist
@@ -954,9 +991,8 @@ app.post('/search', urlencodedParser, function (req, res) {
       res.render('search', context);
     }
     else if (results) {
-      console.log(results)
       if (results[0] == null) {
-        context.error = [{ error: "Search Result Not Found" }]
+        context.error = [{ error: "Search Result Not Found; " + SearchType + " of " + Search + " Does Not Exist" }]
       }
       context.dataList = results
       res.render('search', context);

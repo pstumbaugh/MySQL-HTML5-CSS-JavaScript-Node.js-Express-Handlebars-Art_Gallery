@@ -49,11 +49,13 @@
 
     <th>Order ID</th>
     <th>Gallery</th>
+    <th></th>
 
     {{#each dataListMToM}}
     <tr id="newRow">
       <td id="orderID">{{this.orderID}}</td>
       <td id="galleryID">{{this.galleryName}}</td>
+      <td><button type="button" , onclick="deleteOTG({{orderID}},{{galleryID}})">Delete Relationship</button></td>
     </tr>
     {{/each}}
   </table>

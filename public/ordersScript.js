@@ -146,7 +146,6 @@ function addButtonClick() {
 
 //AJAX delete request:
 function deleteID(id) {
-  console.log(id);
   $.ajax({
     url: '/deleteOrder/' + id,
     type: 'DELETE',
@@ -156,6 +155,32 @@ function deleteID(id) {
     }
   })
 };
+
+//AJAX delete request (for OrdersToGalleries table):
+function deleteOTG(orderID, galleryID) {
+  if (confirmComplete() == true) {
+    $.ajax({
+      url: '/deleteOTG/' + orderID + "," + galleryID,
+      type: 'DELETE',
+      success: function (result) {
+        window.location.reload(true);
+        event.preventDefault();
+      }
+    })
+  }
+};
+
+//confirm if user should continue or not
+function confirmComplete() {
+  var answer = confirm("This will also remove the order ID from any paintings in this order associated with this gallery. \n\n Are you sure you want to continue");
+  if (answer == true) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
 
 
 
