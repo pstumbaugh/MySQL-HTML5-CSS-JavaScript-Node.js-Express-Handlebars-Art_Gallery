@@ -954,9 +954,8 @@ app.post('/search', urlencodedParser, function (req, res) {
       res.render('search', context);
     }
     else if (results) {
-      console.log(results)
       if (results[0] == null) {
-        context.error = [{ error: "Search Result Not Found" }]
+        context.error = [{ error: "Search Result Not Found; "+SearchType+" of "+Search+" Does Not Exist"}]
       }
       context.dataList = results
       res.render('search', context);
