@@ -165,7 +165,7 @@ h1 {
 
 #homePageBody {
   background-image: url('./images/WhiteToLightBlue.jpg');
-  background-size: cover;
+  background-size: cover ;
 }
 
 #artistsBody {

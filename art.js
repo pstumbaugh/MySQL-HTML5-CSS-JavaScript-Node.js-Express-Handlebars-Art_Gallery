@@ -357,9 +357,10 @@ app.get('/galleries', function (req, res) {
 
 //DELETE PAINTING
 //Deletes an painting from the table using the ID
-app.delete('/deletePainting/:id', function (req, res) {
+app.delete('/deletePainting/:paintingID,:orderID,:galleryID', function (req, res) {
+  console.log("test");
   var sql = "DELETE FROM Paintings WHERE paintingID = ?";
-  var inserts = [req.params.id];
+  var inserts = [req.params.paintingID];
   sql = mysql.pool.query(sql, inserts, function (error, results, fields) {
     if (error) { //if error, log it in the console
       console.log(error)
@@ -367,7 +368,25 @@ app.delete('/deletePainting/:id', function (req, res) {
       res.status(400);
       res.end();
     } else { //if success, return 202 status
-      res.status(202).end();
+
+      mysql.pool.query("SELECT * FROM `Paintings` WHERE orderID = ? AND galleryID = ?", [req.params.orderID, req.params.galleryID], function (err, nullPaintingsResults) {
+        console.log("Number of items in Paintings that also have that order number (after deletion): " + nullPaintingsResults.length);
+
+        if (nullPaintingsResults.length > 1) {
+          console.log("More than one painting with the same gallery in the same order -- doing nothing to OrdersToGalleries table");
+        }
+        else { //If only 1 result, remove that orderID and galleryID relation from the OrdersToGalleries table
+          mysql.pool.query("DELETE FROM OrdersToGalleries WHERE orderID = ? AND galleryID = ?", [req.params.orderID, req.params.galleryID], function (err, result) {
+            if (err) {
+              next(err);
+              return;
+            }
+          });
+        }
+        res.status(202).end();
+      });
+
+
     }
   })
 });
@@ -807,7 +826,7 @@ app.post('/orders', function (req, res) {
                   //send an insert request to table
                   var newSql2 = "INSERT INTO OrdersToGalleries (orderID, galleryID) VALUES (?, ?)";
                   var inserts2 = [newOrderID, galleryIDtoInsert];
-                  console.log("Creating a new order with order ID: " + newOrderID);
+                  console.log("\nCreating a new order with order ID: " + newOrderID);
                   newSql2 = mysql.pool.query(newSql2, inserts2, function (error, results, fields) {
                     if (error) {
                       res.write(JSON.stringify(error));
@@ -867,7 +886,7 @@ app.post('/moreOrders', function (req, res) {
           //Update the Paintings to reflect new order
           var newSql = "UPDATE Paintings SET orderID=? WHERE paintingID=?";
           var newInserts = [newOrderID, currPaintingID];
-          console.log("INSERTS: " + newInserts);
+          console.log("More Paintings INSERTS (orderID), (paintingID): " + newInserts);
           newSql = mysql.pool.query(newSql, newInserts, function (error, results, fields) {
             if (error) {
               res.write(JSON.stringify(error));

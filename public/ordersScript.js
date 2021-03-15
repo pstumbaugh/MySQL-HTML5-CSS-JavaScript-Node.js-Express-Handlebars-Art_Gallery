@@ -20,7 +20,6 @@ function addButtonClick() {
   payloadPaintingID[3] = document.getElementById("paintingsToChoose4").value;
   payloadPaintingID[4] = document.getElementById("paintingsToChoose5").value;
 
-  debugger;
   //check if nothing was selected, if so, use 0
   for (var a = 0; a < payloadPaintingID.length; a++) {
     console.log("Choose painting " + (a + 1) + ":");
@@ -29,7 +28,6 @@ function addButtonClick() {
   }
 
   console.log(payloadCustomerID);
-  debugger;
 
   //if one of the items in the table is not filled out, display error about that item
   //(after this, it will check all items are filled in. If not, it will error and not add to table)
@@ -86,7 +84,7 @@ function addButtonClick() {
     event.preventDefault();
 
     //wait 1 second, then add other paintings in order:
-    var delayInMilliseconds = 1000; //1 second
+    var delayInMilliseconds = 500; //half second
     setTimeout(function () {
       //add in any extra paintings to new order number
       for (var i = 1; i < payloadPaintingID.length; i++) {
@@ -137,6 +135,7 @@ function addButtonClick() {
     alert("Painting(s) added successfully to order");
     event.preventDefault();
     window.location.replace('./orders');
+    event.preventDefault();
   }
   return;
 }

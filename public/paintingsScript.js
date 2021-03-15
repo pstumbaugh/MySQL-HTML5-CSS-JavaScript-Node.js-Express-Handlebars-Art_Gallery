@@ -99,10 +99,11 @@ function addButtonClick() {
 
 
 //AJAX delete request:
-function deleteID(id) {
-  console.log(id);
+function deleteID(paintingID, orderID, galleryID) {
+  console.log("TEST")
+  console.log(galleryID);
   $.ajax({
-    url: '/deletePainting/' + id,
+    url: '/deletePainting/' + paintingID + "," + orderID + "," + galleryID,
     type: 'DELETE',
     success: function (result) {
       window.location.reload(true);
@@ -110,7 +111,6 @@ function deleteID(id) {
     }
   })
 };
-
 
 
 
